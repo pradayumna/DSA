@@ -1,0 +1,4 @@
+When data is random, insertion sort takes the least amount of time.
+When data is in decreasing order, selection sort takes the least amount of time
+When data is in ascending order, bubble sort takes the least amouunt of time
+When data is nearly sorted, insertion sort takes the least amount of time
