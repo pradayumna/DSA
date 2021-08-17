@@ -1,99 +1,74 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Created on Sun Aug 15 15:44:33 2021
+Created on Mon Aug 16 23:53:52 2021
 
 @author: pradyumna agrawal
-@student ID: 20046165
-@Practical 2
-
-highest factorial - 2958
 """
+import prac2func as f
 
-def factorial(n):
-    if n == 1:
-        fact = n
+
+def factorial(number):
+    if number < 0:
+        raise ValueError(str(number) + " is not a valid input.")
     else:
-        fact = n * factorial(n-1)
-    return fact
+        return f._factorial(number)
 
-#print(factorial(2958))
-
-def fibonacii(n):
-    if n == 0 or n == 1:
-        ans = n
+def fibonacci(number):
+    if number < 0:
+        raise ValueError(str(number) + " is not a valid input.")
     else:
-        ans = fibonacii(n-1) + fibonacii(n-2)
-        
-    return ans
-    
-#print(fibonacii(40))
-
-def gcd(a, b):
-    if a > b:
-        ans = gcd(b, a)
-        return ans
-    if b%a == 0:
-        ans = a
+        return f._fibonacii(number)
+def gcd(num1, num2):
+    if num1 < 1 or num2 < 1:
+        raise ValueError("please enter numbers greater than 0")
     else:
-        ans = gcd(b%a, b)
-    return ans
+        return f._gcd(num1, num2)
 
-#print(gcd(112, 120))
-
-def int2chr(n):
-    if n <= 9:
-        return chr(n + ord('0'))
+def nconvert(num1, num2):
+    if num2 < 0:
+        raise ValueEoor("please enter a non-negative integer")
     else:
-        return chr(n - 10 + ord('A'))
-    
-def nconvert(n, base):
-    if base > 16 or base < 2:
-        return "choose a base between 2 and 16"
-    if n < base:
-        ans = int2chr(n)
-    else:
-        ans = nconvert(n//base, base) + int2chr(n%base)
-    return ans
-
-#print(nconvert(14782, 2))
-
-def moveDisk(src, dest, level):
-    print("\t" * (level) + "moving one disc from disc " + str(src) + "to " + str(dest))
-
-def towerOfHanoi(n, src, dest, level):
-    print("\t" * level + "towerOfHanoi(" + str(n) + "," + str(src) + "," + str(dest) + ')')
-    if n == 1:
-        moveDisk(src, dest, level)
-    else:
-        tmp = 6 - src - dest
-        towerOfHanoi(n-1, src, tmp, level+1)
-        moveDisk(src, dest, level+1)
-        towerOfHanoi(n-1, tmp, dest, level+1)
-        
+        return f._nconvert(num1, num2)
 
 def main():
     while(True):
-        print("G'day mate. Which program you wanna run today?\n(1) (F)actorial\n(2) (G)CD\n(3) (N)umber Converter\n(4) (T)ower of Hanoi\n(5) (E)xit\n")
+        print("G'day mate. Which program you wanna run today?\n(1) (F)actorial\n(2) Fibon(a)cii\n(3)(G)CD\n(4) (N)umber Converter\n(5) (E)xit\n")
         menu = input().upper()
         if menu == "F":
-            ans = factorial(int(input("Thats a great choice\nSo which factorial would you like to calculate?")))
-            print("Here is your answer " + str(ans) + "\n")
+            try:
+                inp = int(input("Thats a great choice\nSo which factorial would you like to calculate?"))
+                ans = factorial(inp)
+                print("Here is your answer " + str(ans) + "\n")
+            except ValueError as err:
+                print(err, "Please enter a non-negative integer")
         elif menu == "G":
-            num1 = int(input("enter first number"))
-            num2 = int(input("enter second number"))
-            ans = gcd(num1, num2)
+            try:
+                num1 = int(input("enter first number"))
+                num2 = int(input("enter second number"))
+                ans = gcd(num1, num2)
+                print(ans)
+            except ValueError as err:
+                print(err, "Please enter a non-negative integer")
         elif menu == "N":
-            num1 = int(input("enter the base to which you want to convert"))
-            num2 = int(input("enter number in decimal"))
-            ans = nconvert(num2, num1)
+            try:
+                num1 = int(input("enter the base to which you want to convert"))
+                num2 = int(input("enter number in decimal"))
+                ans = nconvert(num2, num1)
+            except ValueError as err:
+                print(err, "please enter a non-negative number")
             print(str(num2) + " in " + str(num1) + " base is " + str(ans) + "\n")
-        elif menu == "T":
-            num = input("How many rings you want in the the game")
-            towerOfHanoi(int(num), 1, 3, 0)
+        elif menu == "A":
+            try:
+                inp = int(input("Thats a great choice\nSo which fibonacci number would you like to calculate?"))
+                ans = fibonacci(inp)
+                print("Here is your answer " + str(ans) + "\n")
+            except ValueError as err:
+                print(err, "Please enter a non-negative integer")
         elif menu == "E":
             break
         else:
             print("Please enter a valid input as follow \n")
 if __name__ == "__main__":
     main()
+

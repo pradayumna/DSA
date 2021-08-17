@@ -1,0 +1,7 @@
+1) Factorial - The highest value that it can take is 2958. It does not takes negative values. 
+
+2) fibonacci - Performance gets really slow if you give number greater than 60. Due to slow performance, can not fully check the maximum value that it can take. 
+3) gcd - it does not take negative values. it can take numbers in any order.
+4) nconvert - base needs to be between 2 and 16. number needs to be a non-negative integer. Number can be pretty much anything till infinity.
+
+5) tower of hanoi - Number has to be a positive integer. code gets slow after n> 100, therefore, cannot fully check. 

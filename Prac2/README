@@ -1,23 +1,18 @@
 ##Synopsis 
 
-Overview - Practical 1 folder for DSA
+Overview - Practical 2 folder for DSA
 Author - Pradyumna Agrawal
 ID - 20046165
 email - pradyumna.agrawal@student.curtin.edu.au
-Version - 1 (3rd August 2021)
+Version - 1 (17th August 2021)
 
 ##Content
 
-activity4 - Written note about observation of run time of various sorting algorithms 
-BubbleSortedNames.csv - Sorted file of random names. Sorted using bubble sort algorithm
-DSAsorts.py - Python file containing function definitions for various sorting algorithms. All these algorithms take array of integers/numbers as input
-DSAsorts2.py - Python file containing function definitions for various sorting algorithms. All these algorithms are suitable for processing data from a csv file with first column as integers/numbers
-InsertionSortedNames.csv - Sorted file of random names. Sorted using Insertion Sort
-Practical-01...es and Sorting - PDF file containing task details for Prac1
-RandomNames7000(2).csv - csv file with unsorted random names
-README - File containing information about this folder.
-runpy.sh - Shell file to run code again and again. 
-SelectionSortedNames.csv - Sorted file of random names. SOrted using Selection Sort Algorithm
-sort_data.csv - csv file containing time performance of various sorting algorithms
-sortcsv.py - file containing preprocessing code for sorting csv data
-SortsTestHarness.py - Python file with code to run all the sorting algorithms and output a csv file to compare performance of various algorithms. 
+README - file containing information about all other files in the folder
+prac2.py - main python file to execute all the recursive programs.
+prac2func.py - python file with function definitions that are used in prac2.py
+towerofhanoi.py - file to implement tower of hanoi code
+
+## dependencies 
+
+None
