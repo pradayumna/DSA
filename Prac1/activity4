@@ -1,4 +1,13 @@
-When data is random, insertion sort takes the least amount of time.
-When data is in decreasing order, selection sort takes the least amount of time
-When data is in ascending order, bubble sort takes the least amouunt of time
-When data is nearly sorted, insertion sort takes the least amount of time
+When data is random, insertion sort takes the least amount of time. It makes sense as insertion sort utilises already sorted array at the left hand side. It also involves least number of swaps. 
+
+When data is in decreasing order, selection sort takes the least amount of time. It makes sense as if we were to do insertion sort, during every single outer loop, we will be sliding the entire already sorted array as the first element of non-sorted array will go and become first element of sorted portion of array. On the other hand, selection sort will put two numbers at right place in one outer-loop.
+
+When data is in ascending order, bubble sort takes the least amount of time. It makes sense as we have put a condition in bubble sort that checks for array to be already sorted. So this condition is able to give result in one go. 
+
+
+When data is nearly sorted, insertion sort takes the least amount of time. Nearly sorted array is more like a pseudo-random array. Therefore, insertion sort performs best. 
+
+
+Although, all these algorithms have a time complexity of n^2. but the result changes as we change the type of data. 
+bubble sort works best with already sorted data as its time complexity for the best case is n. (outer  loop only runs once)
+selection sort works best with decreasing data as it selects the smallest number in one outer loop (last number in the list) and swaps it with the first number. This way, it puts two numbers at correct position in one attempt. 

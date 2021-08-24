@@ -20,6 +20,7 @@ import timeit
 import DSAsorts
 import random
 
+
 REPEATS = 3           #No times to run sorts to get mean time
 NEARLY_PERCENT = 0.10 #% of items to move in nearly sorted array
 RANDOM_TIMES = 100    #No times to randomly swap elements in array
@@ -50,7 +51,7 @@ def doSort(n, sortType, arrayType):
                 temp = A[i]
                 A[i] = A[n-i-1]
                 A[n-i-1] = temp
-            #print("Descending: ", A)
+            print("Descending: ", A)
         elif arrayType == 'r':
             for i in range(RANDOM_TIMES*n):
                 x = int(random.random()*n)
@@ -58,7 +59,7 @@ def doSort(n, sortType, arrayType):
                 temp = A[x]
                 A[x] = A[y]
                 A[y] = temp
-            #print("Random: ", A)
+            print("Random: ", A)
         elif arrayType == 'n':
             for i in range(int(n*NEARLY_PERCENT/2+1)):
                 x = int(random.random()*n)
@@ -66,7 +67,7 @@ def doSort(n, sortType, arrayType):
                 temp = A[x]
                 A[x] = A[y]
                 A[y] = temp
-            #print("Nearly sorted: ", A)
+            print("Nearly sorted: ", A)
         else:
             print("Unsupported array type")
 
@@ -89,11 +90,14 @@ def doSort(n, sortType, arrayType):
 
 #main program
 
-def inspect(n, syst):
-    lst = []
-    for aa in range(1, len(syst)):
-        sortType = syst[aa][0]
-        arrayType = syst[aa][1]
+if len(sys.argv) < 3:
+    usage()
+else:
+    for aa in range(2, len(sys.argv)):
+        
+        n = int(sys.argv[1])
+        sortType = sys.argv[aa][0]
+        arrayType = sys.argv[aa][1]
 
         runningTotal = 0
 
@@ -104,19 +108,4 @@ def inspect(n, syst):
 
              runningTotal += (endTime - startTime)
     
-        #print(sortType + arrayType + " " + str(n) + " " + str(runningTotal/(REPEATS - 1)))
-        lst.append(runningTotal/(REPEATS - 1))
-    return lst
-
-lst = []
-for i in range(5,25,5):
-    lst.append(inspect(i, sys.argv))
-print(lst)   
-f = open('sort_data.csv', "w+")
-f.write('br,sr,ir,bd,sd,id,ba,sa,ia,bn,sn,in\n')
-for i in lst:
-    for j in i:
-        f.write(str(j)+',')
-    f.write('\n')
-    
-    
+        print(sortType + arrayType + " " + str(n) + " " + str(runningTotal/(REPEATS - 1)))

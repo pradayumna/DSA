@@ -16,14 +16,15 @@ def bubbleSort(A):
                 A[i] = A[i] - A[i+1]
                 sort = False #yo so assumption is wrong 
         pas = pas + 1 #anyway, one more bubble bursted. 
-    return A #return the array              
+    return A #return the array
+          
 
 def insertionSort(A):
     for i in range(1,len(A)): #Run from second index to last
         j = i #basically j means that array till j is sorted
         temp = A[j] #now make j as the element that we want to insert
         while j > 0 and A[j - 1] > temp: #check for the location where we want to insert it
-            A[j] = A[j-1] #keep swaping 
+            A[j] = A[j-1] #keep sliding 
             j = j-1 #keep husling mate
         A[j] = temp #ah we found it, now insert
     return A #dont forget to return the array
@@ -58,8 +59,6 @@ def quickSort(A):
 def quickSortRecurse(A, leftIdx, rightIdx):
     ...
 
-def doPartitioning(A, leftIdx, rightIdx, pivotIdx):
+def doPartistioning(A, leftIdx, rightIdx, pivotIdx):
     ...
     
-A = [2, 5, 2, 5, 1, 4, 6, 12, 6, 1, 5, 0, 0, 2, 1, 0]
-insertionSort(A)
