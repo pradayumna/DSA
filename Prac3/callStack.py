@@ -23,7 +23,7 @@ def _fibonacii(n, callStack):
         
     return ans
 
-_fibonacii(5, callStack)
+
 
 def qFunc(a, b, callStack):
     arr = "qFUnc()"
@@ -41,4 +41,9 @@ def modFunc(a, b, callStack):
     print("now popping ", callStack.pop(), " from the stack")
     return a - q*b
 
-modFunc(10, 6, callStack)
+def main():
+    _fibonacii(5, callStack)
+    modFunc(10, 6, callStack)
+    
+if __name__ == "__main__":
+    main()
