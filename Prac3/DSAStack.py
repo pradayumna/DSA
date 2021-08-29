@@ -14,7 +14,6 @@ class stack():
     def __init__(self):
         self.stackArray = np.empty(self.maxSize, dtype = object)
         self.size = 0
-        print(len(self.stackArray))
         
     def isEmpty(self):
         return self.size == 0
