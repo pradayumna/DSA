@@ -12,6 +12,7 @@ class DSAListNode:
     def __init__(self, value):
         self.value = value
         self.next = None
+        self.prev = None
         
     
 class DSALinkedList:
@@ -29,6 +30,7 @@ class DSALinkedList:
             self.head = self.tail = newNd
         else:
             newNd.next = self.head
+            self.head.prev = newNd
             self.head = newNd
             
     def insertLast(self, value):
@@ -38,6 +40,7 @@ class DSALinkedList:
             self.head = self.tail = newNd
         else:
             self.tail.next = newNd
+            newNd.prev = self.tail
             self.tail = newNd
             
     def peekFirst(self):
@@ -58,29 +61,19 @@ class DSALinkedList:
         if not self.isEmpty():
             nodeValue = self.head.value
             self.head = self.head.next
+            if not self.head is None:
+                self.head.prev = None
             return nodeValue
         
     def removeLast(self):
         
-        if self.isEmpty():
-            return None
-            
-        elif self.head.next is None:
-            nodeValue = self.head.value
-            self.head = None
-            self.tail = None
+        if not self.isEmpty():
+            nodeValue = self.tail.value
+            self.tail = self.tail.prev
+            if not self.tail is None:
+                self.tail.next = None
             return nodeValue
         
-        else:
-            
-            prevNd = None
-            currNd = self.head
-            while not currNd.next is None:
-                prevNd = currNd
-                currNd = currNd.next
-            prevNd.next = None
-            self.tail = prevNd
-            return currNd.value
 
 #these are just tests to check if the list is working properly. Will add them seperately in a testHarness
 A = DSALinkedList()
