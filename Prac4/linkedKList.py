@@ -17,7 +17,7 @@ class DSAListNode:
 class DSALinkedList:
     
     def __init__(self):
-        self.head = None
+        self.head = self.tail = None
         
     def isEmpty(self):
         if self.head is None: return True; return False #return true if head is pointing to nothing
@@ -26,7 +26,7 @@ class DSALinkedList:
         newNd = DSAListNode(value)
         
         if self.isEmpty():
-            self.head = newNd
+            self.head = self.tail = newNd
         else:
             newNd.next = self.head
             self.head = newNd
@@ -35,27 +35,23 @@ class DSALinkedList:
         
         newNd = DSAListNode(value)
         if self.isEmpty():
-            self.head = newNd
+            self.head = self.tail = newNd
         else:
-            currNd = self.head
-            while not currNd.next is None:
-                currNd = currNd.next
-            currNd.next = newNd
+            self.tail.next = newNd
+            self.tail = newNd
             
     def peekFirst(self):
-        if self.isEmpty():
+        if self.isEmpty(): 
             return None
         else:
             return self.head.value
         
     def peekLast(self):
-        if self.isEmpty():
+        if self.isEmpty(): 
             return None
         else:
-            currNd = self.head
-            while not currNd.next is None:
-                currNd = currNd.next
-            return currNd.value
+            return self.tail.value
+        
         
     def removeFirst(self):
         
@@ -72,6 +68,7 @@ class DSALinkedList:
         elif self.head.next is None:
             nodeValue = self.head.value
             self.head = None
+            self.tail = None
             return nodeValue
         
         else:
@@ -82,6 +79,7 @@ class DSALinkedList:
                 prevNd = currNd
                 currNd = currNd.next
             prevNd.next = None
+            self.tail = prevNd
             return currNd.value
 
 #these are just tests to check if the list is working properly. Will add them seperately in a testHarness
