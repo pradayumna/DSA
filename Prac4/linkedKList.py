@@ -20,6 +20,12 @@ class DSALinkedList:
     def __init__(self):
         self.head = self.tail = None
         
+    def __iter__(self):
+        currNd = self.head
+        while currNd is not None:
+            yield currNd.value 
+            currNd = currNd.next
+        
     def isEmpty(self):
         if self.head is None: return True; return False #return true if head is pointing to nothing
         
@@ -63,6 +69,8 @@ class DSALinkedList:
             self.head = self.head.next
             if not self.head is None:
                 self.head.prev = None
+            else:
+                self.tail = None
             return nodeValue
         
     def removeLast(self):
@@ -72,6 +80,8 @@ class DSALinkedList:
             self.tail = self.tail.prev
             if not self.tail is None:
                 self.tail.next = None
+            else:
+                self.head = None
             return nodeValue
         
 
@@ -90,13 +100,15 @@ print(A.removeFirst()) #should print 3
 print(A.peekFirst()) #should print 4
 print(A.removeLast()) #should print 6
 print(A.peekLast()) #should print 5
+A.insertFirst(8)
+for i in A:
+    print(i)
 
 #Now checking extreme cases
 B = DSALinkedList()
-B.removeFirst()
-B.removeLast()
-print(B.peekFirst())
+B.insertFirst(4)
+print(B.removeFirst()) #should print 4
 print(B.peekLast())
-print(B.isEmpty())
-B.insertFirst(2)
-print(B.removeLast())
+print(B.peekFirst()) #should print none
+B.insertLast(2) #should print none
+print(B.removeLast()) #should print 2
