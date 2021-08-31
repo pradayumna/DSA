@@ -4,6 +4,7 @@
 Created on Tue Aug 23 10:22:11 2021
 
 @author: pradyumna agrawal 
+code for queues with linked list
 """
 
 from linkedKList import DSALinkedList

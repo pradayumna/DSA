@@ -11,7 +11,7 @@ from DSAStack import stack
 callStack = stack()
 
 
-def _fibonacii(n, callStack):
+def _fibonacii(n, callStack): #recursion
     arr = "fibonacii(" + str(n) + ")"
     callStack.push(arr)
     print("pushed ", arr, " in the stack")
@@ -33,7 +33,7 @@ def qFunc(a, b, callStack):
 
     return int(a/b)
 
-def modFunc(a, b, callStack):
+def modFunc(a, b, callStack): 
     arr = "modFunc()"
     print("pushed ", arr, " in the stack")
     callStack.push(arr)

@@ -9,7 +9,7 @@ from linkedKList import DSALinkedList
 
 class stack():
     
-    
+    #code for Stack
     def __init__(self):
         self.stackArray = DSALinkedList()
         

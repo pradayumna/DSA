@@ -13,3 +13,4 @@ f = ['4', '4 + 7', '4 - 7', '4 * 7', '4 / 7', '4 + 7 * 4 / 7', '4 * ( 4 + 7 )']
 for equation in f:
     EQObject = equationSolver(equation)
     print(EQObject.solve())
+    
