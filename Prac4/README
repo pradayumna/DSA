@@ -9,8 +9,15 @@ Version - 1 (30th August 2021)
 ##Content
 
 README - file containing information about all other files in the folder
-
-
+DSAQueue.py - FIFO queue with Doubly-linked list
+DSAStack.py - LIFO stack with Double-Linked list
+DSAQueueTestHarness.py - Tester file for DSAQueue
+DSAStackTestHarness.py - Tester file for DSAStack
+linkedKList.py - Doubly-linked double-pointer Linked List
+testHarness.py - Tester file for linkedList
+linkedListSerialised.py - Serialising using Pickle module
+placesDAT - Data file created after serialisation
+UML.docx - Microsoft word file with UML diagram
 ## dependencies 
 
 None
