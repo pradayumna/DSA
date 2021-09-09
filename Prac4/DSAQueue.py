@@ -8,7 +8,7 @@ code for queues with linked list
 """
 
 from linkedKList import DSALinkedList
-
+#change name to list
 
 class queue():
     
@@ -21,6 +21,9 @@ class queue():
         while currNd is not None:
             yield currNd.value 
             currNd = currNd.next
+    
+    def __str__(self):
+        return "this is a queue"
     
     def isEmpty(self):
         return self.queueArray.isEmpty()
@@ -40,4 +43,5 @@ class queue():
             return self.queueArray.peekFirst()
         else:
             raise IndexError("Queue is empty")
+            
             

@@ -34,8 +34,8 @@ while(True):
     if option == "3":
         try:
             LL.insertFirst(12)
-            with open('placesDAT', "wb") as dataFile:
-                pickle.dump(LL, dataFile)
+            with open('placesDAT', "wb") as f:
+                pickle.dump(LL, f)
         except:
             "nothing to dump"
         

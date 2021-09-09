@@ -12,6 +12,7 @@ class stack():
     #code for Stack
     def __init__(self):
         self.stackArray = DSALinkedList()
+        self.size = 0
         
     def __iter__(self):
         currNd = self.stackArray.head
@@ -24,7 +25,7 @@ class stack():
 
     
     def count(self):
-        return self.size
+        return self.size #needs update
     
     def top(self):
         if not self.isEmpty():
@@ -34,11 +35,13 @@ class stack():
             
     def pop(self):
         if not self.isEmpty():
+            self.size -= 1
             return self.stackArray.removeFirst()
         else:
             raise IndexError('The stack is empty')
             
     def push(self, num):
         self.stackArray.insertFirst(num)
+        self.size += 1
     
 
