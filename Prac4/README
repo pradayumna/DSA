@@ -1,23 +1,21 @@
 ##Synopsis 
 
-Overview - Practical 4 folder for DSA
+Overview - Practical 4  folder for DSA
 Author - Pradyumna Agrawal
 ID - 20046165
 email - pradyumna.agrawal@student.curtin.edu.au
-Version - 1 (30th August 2021)
+Version - 1 (17rd August 2021)
 
 ##Content
 
-README - file containing information about all other files in the folder
-DSAQueue.py - FIFO queue with Doubly-linked list
-DSAStack.py - LIFO stack with Double-Linked list
-DSAQueueTestHarness.py - Tester file for DSAQueue
-DSAStackTestHarness.py - Tester file for DSAStack
-linkedKList.py - Doubly-linked double-pointer Linked List
-testHarness.py - Tester file for linkedList
-linkedListSerialised.py - Serialising using Pickle module
-placesDAT - Data file created after serialisation
-UML.docx - Microsoft word file with UML diagram
-## dependencies 
-
-None
+README - File containing information about this folder.
+DSAQueue.py - queue implementation using linked list
+DSAQueueTestHarness.py - file to check queue implementation
+DSAStack.py - Stack implementation using linked list
+DSAStackTestHarness.py - file to check stack implementation
+LinkedKList.py - double-ended doubly-linked list implementation
+placesDAT - Data file
+Prac4_20046165.zip - All this files zipped
+testHarness.py - file to check linked list implementation
+uml.docx - word file with UML diagram for all the classes in this folder
+UnitTestLinkedList.py - another file to check functionality of Linked Lists
