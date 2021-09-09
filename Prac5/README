@@ -1,0 +1,22 @@
+##Synopsis 
+
+Overview - Practical 5  folder for DSA
+Author - Pradyumna Agrawal
+ID - 20046165
+email - pradyumna.agrawal@student.curtin.edu.au
+Version - 1 (31st August 2021)
+
+##Content
+
+README - File containing information about this folder.
+BSTIO.py - file to input and output binary search tree in csv and serialised formats
+DSABinarySearchTree.py - Binary Search Tree Implementation
+DSAQueue.py - Queue implementation to support BST implementation
+DSATreeNode.py - Tree Node implementation to support BST implementation
+linkedKList.py - Linked List Implementation to support BST implementation
+Practical-05 - Trees.pdf - Question File
+RandomNames7000.csv - File with 7000 names
+
+Dependencies
+BST depends on following files - DSAQueue.py, DSATreeNode.py, linkedKList.py
+

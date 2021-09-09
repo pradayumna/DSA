@@ -1,0 +1,18 @@
+##Synopsis 
+
+Overview - Practical 6 folder for DSA
+Author - Pradyumna Agrawal
+ID - 20046165
+email - pradyumna.agrawal@student.curtin.edu.au
+Version - 1 (7th September 2021)
+
+##Content
+
+README - File containing information about this folder.
+DSA-Lect06 Graphs 2020_S1.pdf - lecture notes
+DSAStack.py - Stack Implementation to support other files
+linkedKList.py - linked List implementation to support other files. 
+Prac6_1.al - data file to represent a bidirectional graph
+Prac6_2.ai - data file to represent another bidirectional graph
+Practical-05 - Graphs.pdf - Question File
+DSAGraph.py - Graph implementation

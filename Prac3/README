@@ -1,0 +1,25 @@
+##Synopsis 
+
+Overview - Practical 3 folder for DSA
+Author - Pradyumna Agrawal
+ID - 20046165
+email - pradyumna.agrawal@student.curtin.edu.au
+Version - 1 (3rd August 2021)
+
+##Content
+
+README - File containing information about this folder.
+callStack.py - file to implement call stack functionality
+DSAQueue.py - Queue Implementation
+DSAQueueTestHarness.py - File to check Queue Implementation
+DSAStack.py - Stack Implementation
+DSAStacknQueueUML.docx - doc file with UML diagrams for Queue and Stack
+EquationSolver.py - Solves expressions using postfix notation
+EquationSolverTestHarness.py - File to test equationsolver.py
+Prac3_20046165.zip - All the above files in zipped
+Practical-03 - Sracks and Queues.pdf - question file
+
+##Dependencies 
+
+Python 3.6 and above
+numpy
