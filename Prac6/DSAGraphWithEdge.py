@@ -8,7 +8,8 @@ Created on Thu Sep  9 00:17:26 2021
 
 from linkedKList import DSALinkedList
 import os
-from DSAQueue import queue 
+from DSAQueue import queue
+import pickle 
 
 class DSAGraph:
     
@@ -48,7 +49,7 @@ class DSAGraph:
             return vertex.getAdjacentList()
         return None
         
-    def addEdge(self, label1, label2):
+    def addEdge(self, label1, label2, value = None):
         
         if not self.hasVertex(label1):
             self.addVertex(label1, None)   
@@ -58,8 +59,8 @@ class DSAGraph:
            
             v1 = self.getVertex(label1)
             v2 = self.getVertex(label2)
-            v1.addAdjacent(v2)
-            v2.addAdjacent(v1)  
+            v1.addAdjacent(v2, value)
+            v2.addAdjacent(v1, value)  
 
     
     def isAdjacent(self, label1, label2):
@@ -67,7 +68,7 @@ class DSAGraph:
         if(v1):
             adjacentList = v1.getAdjacentList()
             for j in adjacentList:
-                label = j.getLabel()
+                label = j.vertex.getLabel()
                 if label == label2:
                     return True
         return False
@@ -87,7 +88,7 @@ class DSAGraph:
             adjacentList = i.getAdjacentList()
             print(str(label) + ' : ', end = " ")
             for j in adjacentList:
-                label = j.getLabel()
+                label = j.vertex.getLabel()
                 print(str(label), end = " ")
             print()
             
@@ -100,9 +101,9 @@ class DSAGraph:
     def _DFS(self, v, visited, T):
         visited.add(v)
         for i in v.getAdjacentList():
-            if i not in visited:
-                T.append([v.getLabel(), i.getLabel()])
-                self._DFS(i, visited, T)
+            if i.vertex not in visited:
+                T.append([v.getLabel(), i.vertex.getLabel(), i.getWeight()])
+                self._DFS(i.vertex, visited, T)
         return T
     
     def DFS(self):
@@ -118,10 +119,10 @@ class DSAGraph:
         else:
             v = q.dequeue()
             for w in v.getAdjacentList():
-                if w not in visited:
-                    T.append([v.getLabel(), w.getLabel()])
-                    visited.add(w)
-                    q.enqueue(w)
+                if w.vertex not in visited:
+                    T.append([v.getLabel(), w.vertex.getLabel(), w.getWeight()])
+                    visited.add(w.vertex)
+                    q.enqueue(w.vertex)
                     
             T = self._BFS(q, visited, T)
                 
@@ -154,16 +155,26 @@ class DSAGraphVertex():
     
     def printAdjacentList(self):
         for i in self.getAdjacentList():
-            print(i.getLabel(), end = " ")
+            print([i.vertex.getLabel(), i.value], end = " ")
     
-    def addAdjacent(self, vertex):
-        self.vertexList.insertLast(vertex)
+    def addAdjacent(self, vertex, value):
+        edge = DSAGraphEdge(vertex, value)
+        self.vertexList.insertLast(edge)
     
     def getDegree(self):
         count = 0
         for i in self.vertexList:
             count += 1
         return count
+    
+class DSAGraphEdge():
+    
+    def __init__(self, vertex, value):
+        self.vertex = vertex
+        self.value = value
+        
+    def getWeight(self):
+        return self.value
         
         
 class GraphIO():
@@ -174,11 +185,33 @@ class GraphIO():
         if os.path.isfile(filename):
             file = open(filename)
             a = file.readlines()
-            lst = [[i.split(' ')[0], i.split(' ')[1].strip()] for i in a]
+            lst = [[i.split(' ')[0], i.split(' ')[1].strip(), i.split(' ')[2].strip()] for i in a]
             for i in lst:
-                self.graph.addEdge(i[0], i[1])
+                self.graph.addEdge(i[0], i[1], i[2])
 
         return self.graph
+    
+    def saveGraph(self, graph, filename, variety):
+        file = open(filename, 'w')
+        if variety == "BFS":
+            T = graph.BFS()
+        else:
+            T = graph.DFS()
+        for i in T:
+            string = str(i[0]) + ' ' + str(i[1]) + ' ' + str(i[2]) + '\n'
+            file.write(string)
+            
+    def loadSerialisedGraph(self, filename):
+        try:
+            with open(filename, "rb") as dataFile:
+                self.graph = pickle.load(dataFile)
+        except:
+            print("file does not exist")
+        return self.graph
+    
+    def saveSerialisedGraph(self, graph, filename):
+        with open(filename, "wb") as f:
+                pickle.dump(graph, f)
 
 def main():
     A = DSAGraph()
@@ -186,17 +219,20 @@ def main():
     A.addVertex(2, "B")
     A.addVertex(3, "C")
     A.addEdge(1, 2)
-    A.addEdge(4, 2)
-    A.addEdge(2, 3)
-    A.addEdge(3, 1)
-    A.addEdge(4, 5)
+    A.addEdge(4, 2, 6)
+    A.addEdge(2, 3, 1)
+    A.addEdge(3, 1, 6)
+    A.addEdge(4, 5, 1)
     A.displayList()
     
     io = GraphIO()
-    graph = io.makeGraph('prac6_Act_3.al')
-    graph.displayList()
-    print(graph.BFS())
-    print(graph.DFS())
+    graph = io.makeGraph('prac6_Act_4.al')
+    io.saveSerialisedGraph(graph, 'DATFile')
+    graph2 = io.loadSerialisedGraph('DATFile')
+    graph2.displayList()
+    # print(graph.BFS())
+    # print(graph.DFS())
+    io.saveGraph(graph, 'prac6_Act_4_BFST.al', "BFS")
     
 if __name__ == "__main__":
     main()
