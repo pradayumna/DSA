@@ -1,0 +1,18 @@
+##Synopsis 
+
+Overview - Practical 7 folder for DSA (Hash Table Implementation)
+Author - Pradyumna Agrawal
+ID - 20046165
+email - pradyumna.agrawal@student.curtin.edu.au
+Version - 1 (12th September 2021)
+
+##Content
+
+README - File containing information about this folder.
+DSAHash.py - Implementation of self resizing hash with double hashing
+DSAHashEntry.py - Data structure to of which DSAHash is made up of. It has key, data and state
+newFile.csv - A file created after reading the already existing names file and saving it has a hash table
+RandomNames7000.csv - A random file with 6998 names, few are duplicates. proceed with caution 
+serialisedTable - A Hash Table in serialised format. 
+lecture.pdf - lecture slides
+Practical-06 - Hashing - Question File
