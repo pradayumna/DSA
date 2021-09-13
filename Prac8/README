@@ -1,0 +1,17 @@
+##Synopsis 
+
+Overview - Practical 8 folder for DSA (Heap Sort Implementation)
+Author - Pradyumna Agrawal
+ID - 20046165
+email - pradyumna.agrawal@student.curtin.edu.au
+Version - 1 (14th September 2021)
+
+##Content
+
+README - File containing information about this folder.
+DSAHeap.py - Implementation of a Heap
+DSAHeapEntry.py - Implementation of a heap entry. these heap entries are used in the heap array
+RandomNames7000.csv - csv file with random 7000 names.
+sorted.csv - A file returned by sorting the RandomNames7000.csv using heapsort algorithm.
+testHarness-py - file to test the code
+UML.png - UML diagram for ADTs in this folder
