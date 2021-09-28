@@ -26,6 +26,12 @@ class DSALinkedList:
         while currNd is not None:
             yield currNd.value 
             currNd = currNd.next
+            
+    def __str__(self):
+        string = ''
+        for i in self:
+            string = string + str(i)
+        return string
         
     def isEmpty(self):
         if self.head is None: return True; return False #return true if head is pointing to nothing

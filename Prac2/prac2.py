@@ -27,7 +27,7 @@ def gcd(num1, num2):
 
 def nconvert(num1, num2):
     if num2 < 0:
-        raise ValueEoor("please enter a non-negative integer")
+        raise ValueError("please enter a non-negative integer")
     else:
         return f._nconvert(num1, num2)
 

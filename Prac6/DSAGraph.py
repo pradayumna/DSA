@@ -8,7 +8,8 @@ Created on Thu Sep  9 00:17:26 2021
 
 from linkedKList import DSALinkedList
 import os
-from DSAQueue import queue 
+from DSAQueue import queue
+import numpy as np
 
 class DSAGraph:
     
@@ -47,19 +48,6 @@ class DSAGraph:
         if (vertex):
             return vertex.getAdjacentList()
         return None
-        
-    def addEdge(self, label1, label2):
-        
-        if not self.hasVertex(label1):
-            self.addVertex(label1, None)   
-        if not self.hasVertex(label2):
-            self.addVertex(label2, None)
-        if not self.isAdjacent(label1, label2):
-           
-            v1 = self.getVertex(label1)
-            v2 = self.getVertex(label2)
-            v1.addAdjacent(v2)
-            v2.addAdjacent(v1)  
 
     
     def isAdjacent(self, label1, label2):
@@ -98,16 +86,16 @@ class DSAGraph:
         return 0
     
     def _DFS(self, v, visited, T):
-        visited.add(v)
+        visited.insertFirst(v)
         for i in v.getAdjacentList():
             if i not in visited:
-                T.append([v.getLabel(), i.getLabel()])
+                T.insertLast(np.array((v.getLabel(), i.getLabel())))
                 self._DFS(i, visited, T)
         return T
     
     def DFS(self):
-        visited = set()
-        T = []
+        visited = DSALinkedList()
+        T = DSALinkedList()
         T = self._DFS(self.vertices.head.value, visited, T)
         return T
     
@@ -119,17 +107,17 @@ class DSAGraph:
             v = q.dequeue()
             for w in v.getAdjacentList():
                 if w not in visited:
-                    T.append([v.getLabel(), w.getLabel()])
-                    visited.add(w)
+                    T.insertLast(np.array((v.getLabel(), w.getLabel())))
+                    visited.insertLast(w)
                     q.enqueue(w)
                     
             T = self._BFS(q, visited, T)
                 
         
     def BFS(self):
-        visited = set()
-        T = []
-        visited.add(self.vertices.head.value)
+        visited = DSALinkedList()
+        T = DSALinkedList()
+        visited.insertLast(self.vertices.head.value)
         q = queue()
         q.enqueue(self.vertices.head.value)
         self._BFS(q, visited, T)
@@ -167,8 +155,11 @@ class DSAGraphVertex():
         
         
 class GraphIO():
-    def __init__(self):
-        self.graph = DSAGraph()
+    def __init__(self, variety):
+        if variety == 'U':
+            self.graph = DSAGraphUndirected()
+        else:
+            self.graph = DSAGraphDirected()
 
     def makeGraph(self, filename):
         if os.path.isfile(filename):
@@ -180,8 +171,39 @@ class GraphIO():
 
         return self.graph
 
+class DSAGraphUndirected(DSAGraph):
+    
+     def addEdge(self, label1, label2):
+        
+        if not self.hasVertex(label1):
+            self.addVertex(label1, None)   
+        if not self.hasVertex(label2):
+            self.addVertex(label2, None)
+        if self.isAdjacent(label1, label2):
+            raise ValueError('the edge already exists')
+           
+        v1 = self.getVertex(label1)
+        v2 = self.getVertex(label2)
+        v1.addAdjacent(v2)
+        v2.addAdjacent(v1) 
+            
+class DSAGraphDirected(DSAGraph):
+    
+    def addEdge(self, label1, label2):
+        
+        if not self.hasVertex(label1):
+            self.addVertex(label1, None)   
+        if not self.hasVertex(label2):
+            self.addVertex(label2, None)
+        if self.isAdjacent(label1, label2):
+            raise ValueError("edge already exists")
+           
+        v1 = self.getVertex(label1)
+        v2 = self.getVertex(label2)
+        v1.addAdjacent(v2)
+    
 def main():
-    A = DSAGraph()
+    A = DSAGraphDirected()
     A.addVertex(1, "A")
     A.addVertex(2, "B")
     A.addVertex(3, "C")
@@ -190,13 +212,21 @@ def main():
     A.addEdge(2, 3)
     A.addEdge(3, 1)
     A.addEdge(4, 5)
-    A.displayList()
     
-    io = GraphIO()
-    graph = io.makeGraph('prac6_Act_3.al')
+    graph = DSAGraphUndirected()
+    
+    io = GraphIO('D')
+    graph = io.makeGraph('prac6_2.al')
     graph.displayList()
-    print(graph.BFS())
-    print(graph.DFS())
+    BFS = graph.BFS()
+    DFS = graph.DFS()
+    
+    print(BFS)
+    print('\n')
+    for i in DFS:
+        print(i, end = ' ')
+    
+    
     
 if __name__ == "__main__":
     main()

@@ -40,7 +40,11 @@ class DSAHash():
         return maxSize
     
     def __hashFunction(self, key):
-        return key%self.__maxSize
+        hashIndex = 0
+        for i in key:
+            hashIndex += ord(i)
+        
+        return hashIndex%self.__maxSize
     
     def __probeIndex(self, index, size):
         return (index + size) % self.__maxSize
@@ -62,11 +66,14 @@ class DSAHash():
             return -1
         
     def __stepHash(self, key):
-        return 11 - key%11
+        hashIndex = 0
+        for i in key:
+            hashIndex += ord(i)
+        return 11 - hashIndex%11
     
     def __newSize(self, variety):
         while self.getLoadFactor() > 0.60 and variety == 1:
-            self.__maxSize = self.__getTableSize(self.__maxSize + 1)
+            self.__maxSize = self.__getTableSize(int(self.__maxSize * 1.5))
         while self.__maxSize > 13 and self.getLoadFactor() < 0.10:
             self.__maxSize = self.__getTableSize(int(self.__maxSize/2))
             
@@ -93,12 +100,12 @@ class DSAHash():
             self.__count += 1
             if self.getLoadFactor() > 0.60:
                 self.__reSize(1)
+                print("new size is", self.__maxSize)
     
     
     def get(self, key):
         index = self.__find(key)
         if index != -1:
-            print(index)
             return self.__hashArray[index]
         else:
             raise KeyError("key not found")
@@ -116,12 +123,16 @@ class DSAHash():
             self.__count -= 1
             if self.getLoadFactor() < 0.10:
                 self.__reSize(2)
+                print("new size is", self.__maxSize)
         else:
             raise KeyError("key not found")
     
     
     def getLoadFactor(self):
         return self.__count/self.__maxSize
+    
+    def getHashSize(self):
+        return self.__maxSize
 
 
 class hashIO():
@@ -132,12 +143,12 @@ class hashIO():
     def readCSV(self, filename):
         file = open(filename, 'r')
         data = file.readlines()
-        self.__hashTable = DSAHash(len(data)*2)
+        self.__hashTable = DSAHash(len(data))
         for i in data:
             try:
-                self.__hashTable.put(int(i.split(',')[0]), i.split(',')[1].strip())
+                self.__hashTable.put(i.split(',')[0], i.split(',')[1].strip())
             except KeyError as e:
-                print(e)
+                print(e, i.split(',')[0])
         return self.__hashTable
     
     def writeCSV(self, hashTable, filename):
@@ -160,21 +171,3 @@ class hashIO():
                 pickle.dump(hashTable, f)
         
                 
-        
-    
-A = DSAHash(20)
-A.put(15, 21)
-A.put(2, 2)
-
-#A.put(0, 4)
-#A.deleteKey(23)
-A.put(24, 4)
-print(A.get(24).getValue())
-
-B = hashIO()
-hTable = B.readCSV('RandomNames7000.csv')
-B.writeCSV(hTable, 'newFile.csv')
-B.saveSerialisedFile(hTable, 'serialisedTable')
-hTable.getLoadFactor()
-C = B.loadSerialisedFile('serialisedTable')
-print(C.getLoadFactor())

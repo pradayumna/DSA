@@ -180,7 +180,6 @@ class DSAGraphEdge():
 class GraphIO():
     def __init__(self):
         self.graph = DSAGraph()
-
     def makeGraph(self, filename):
         if os.path.isfile(filename):
             file = open(filename)
@@ -213,26 +212,3 @@ class GraphIO():
         with open(filename, "wb") as f:
                 pickle.dump(graph, f)
 
-def main():
-    A = DSAGraph()
-    A.addVertex(1, "A")
-    A.addVertex(2, "B")
-    A.addVertex(3, "C")
-    A.addEdge(1, 2)
-    A.addEdge(4, 2, 6)
-    A.addEdge(2, 3, 1)
-    A.addEdge(3, 1, 6)
-    A.addEdge(4, 5, 1)
-    A.displayList()
-    
-    io = GraphIO()
-    graph = io.makeGraph('prac6_Act_4.al')
-    io.saveSerialisedGraph(graph, 'DATFile')
-    graph2 = io.loadSerialisedGraph('DATFile')
-    graph2.displayList()
-    # print(graph.BFS())
-    # print(graph.DFS())
-    io.saveGraph(graph, 'prac6_Act_4_BFST.al', "BFS")
-    
-if __name__ == "__main__":
-    main()
