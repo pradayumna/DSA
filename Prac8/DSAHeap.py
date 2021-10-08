@@ -17,6 +17,18 @@ class DSAHeap():
         for i in range(size):
             self.__heapArray[i] = DSAHeapEntry()
             
+    def __str__(self):
+        for i in self.__heapArray:
+            if i.getPriority() != None:
+                print(i.getPriority(), i.getValue())
+        return 'heap printed'
+    
+    def __iter__(self):
+        currIndex = 0
+        while currIndex < self.__count:
+            yield self.__heapArray[currIndex]
+            currIndex += 1
+            
     def __leftChildIndex(self, index):
         return (index * 2) + 1
     
@@ -50,14 +62,15 @@ class DSAHeap():
                 self.__trickleDown(largeIndex)
         
         
-    def add(self, priority, value):
+    def add(self, *args):
         if self.__count == self.__size:
             raise IndexError("Array is full")
         else:
             index = self.__count
             self.__count += 1
-            self.__heapArray[index].setPriority(priority)
-            self.__heapArray[index].setValue(value)
+            self.__heapArray[index].setPriority(args[0])
+            if len(args) > 1:
+                self.__heapArray[index].setValue(args[1])
             self.__trickleUp(index)
             
     def remove(self):
@@ -70,48 +83,52 @@ class DSAHeap():
                 self.__heapArray[0] = DSAHeapEntry()
                 return returnHE
             self.__heapArray[0] = self.__heapArray[self.__count]
+            self.__heapArray[self.__count] = DSAHeapEntry()
             self.__trickleDown(0)
             return returnHE
                 
         
-    def printHeap(self):
-        for i in range(self.__count):
-            print(self.__heapArray[i].getPriority())
-        
     def heapSort(self, *args):
         if len(args) == 1:
-            self.heapArray = args[0]
+            self.__heapArray = args[0]
             self.__size = len(args[0])  #replacing its heap with the array in argument
             self.__count = self.__size
-        returnList = []
+        if self.__count == 0:
+            raise IndexError('You cant sort an empty Heap')
+        returnList = DSAHeap(self.__count)
+        length = self.__count
         for i in range(self.__count):
             data = self.remove()
-            returnList.append([data.getPriority(), data.getValue()])
+            returnList.getHeapArray()[length - i - 1] = DSAHeapEntry(data.getPriority(), data.getValue())
+            # print(data.getPriority())
         return returnList
+    
+    def returnCount(self):
+        return self.__count
+    
+    def getHeapArray(self):
+        return self.__heapArray
         
     
 class DSAHeapIO():
     
     def __init__(self):
         self.heap = DSAHeap(20)
+        self.length = 0
         
     def loadCSV(self, filename):
         link = open(filename, 'r')
         data = link.readlines()
-        self.heap = DSAHeap(len(data))
+        self.length = len(data)
+        self.heap = DSAHeap(self.length)
         for i in data:
             self.heap.add(i.split(',')[0], i.split(',')[1].strip())
             
-    def writeSortedCSV(self, filename, order):
+    def writeSortedCSV(self, filename):
         
         data = self.heap.heapSort()
         file = open(filename, 'w')
-        if order == 'a':
-            data = data[::-1]
-        for i in data:
-            file.write(str(i[0]) + ',' + str(i[1]) + '\n')
-        
-A = DSAHeapIO()
-A.loadCSV('RandomNames7000.csv')
-A.writeSortedCSV('sorted.csv', 'a')        
+        for i in range(self.length):
+            file.write(str(data.getHeapArray()[i].getPriority()) + ',' + str(data.getHeapArray()[i].getValue()) + '\n')
+
 
