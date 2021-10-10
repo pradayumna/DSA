@@ -95,7 +95,7 @@ def quickSort(A):
 
 def _quickSortRecurse(A, leftIdx, rightIdx):
     if rightIdx > leftIdx:
-        pivotIdx = leftIdx  #left most index as pivot
+        pivotIdx = (leftIdx + rightIdx)//2
         newPivotIdx = _doPartistioning(A, leftIdx, rightIdx, pivotIdx)
         
         _quickSortRecurse(A, leftIdx, newPivotIdx-1)
@@ -113,7 +113,7 @@ def _doPartistioning(A, leftIdx, rightIdx, pivotIdx):
     A[currIdx], A[rightIdx] = A[rightIdx], A[currIdx]
     return currIdx
 
-def _median_of_three(L, low, high, mid):
+def median_of_three(L, low, high, mid):
     a = L[low]
     b = L[mid]
     c = L[high]
@@ -138,7 +138,7 @@ def quickSortMedian3(A):
 def _quickSortMedian3Recurse(A, leftIdx, rightIdx):
     if rightIdx > leftIdx:
         midIdx = (leftIdx + rightIdx)//2
-        pivotIdx = _median_of_three(A, leftIdx, rightIdx, midIdx) # median of three pivot
+        pivotIdx = median_of_three(A, leftIdx, rightIdx, midIdx)
         newPivotIdx = _doPartistioning(A, leftIdx, rightIdx, pivotIdx)
         
         _quickSortRecurse(A, leftIdx, newPivotIdx-1)
@@ -150,7 +150,7 @@ def quickSortRandom(A):
     _quickSortRandomRecurse(A, leftIdx, rightIdx)
 def _quickSortRandomRecurse(A, leftIdx, rightIdx):
     if rightIdx > leftIdx:
-        pivotIdx = random.randint(leftIdx, rightIdx) #random pivot
+        pivotIdx = random.randint(leftIdx, rightIdx)
         newPivotIdx = _doPartistioning(A, leftIdx, rightIdx, pivotIdx)
         
         _quickSortRecurse(A, leftIdx, newPivotIdx-1)

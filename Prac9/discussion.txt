@@ -1,0 +1,39 @@
+Checking how time complexisty of insertion sort grows as compared to mergesort 
+
+
+number of elements | Insertion Sort | Merge Sort
+100		   | 0.0144	    | 0.0144
+1000		   | 0.3045	    | 0.1440
+10000		   | 17.824	    | 1.4377
+100000		   | 1734.33	    | 15.246
+
+We can clearly see here that the time taken by merge sort is increasing roughly by a factor of 10. However, time taken by insertion sort is increasing drastically. For the same 100,000 numbers, insertion sort takes 113 times the time
+
+Comparing all the four sorting methods against each
+
+number of elements | quick sort | quick sort median 3 | quick sort random | merge sort
+100		   | 0.0135	| 0.0134	      | 0.0137		  | 0.0149
+1000		   | 0.142	| 0.139		      |	0.133		  | 0.143
+10000		   | 1.346	| 1.321		      | 1.344		  | 1.424
+100000		   | 13.669	| 14.007	      |	13.497		  | 15.104
+
+It turns out that quick sort is a bit faster than the merge sort. We cannot say that among the three types of sorts, which one is the fastest for random data. It totally depends on how the input array is arranged. 
+
+
+Comparing all four sorting algorithms on nearly sorted data (n = 100,000)
+
+Quick Sort -> 1.654
+Quick Sort Median 3 -> 1.645
+Quick Sort Random -> 1.623
+Merge Sort -> 2.498
+
+We can see here that for same amount of data, these algorithms take much lesser time. This is because they the basic intuition behind these algorithms is that they make array 'somewhat sorted' in every pass. 
+
+Comparing all fourt sorting algorithms on ascending  data (n = 1000)
+
+Quick Sort -> 0.1403
+Quick Sort Median 3 -> 0.070
+Quick Sort Random -> 0.087
+Merge Sort -> 0.015
+
+It is evident that quick sort algoriths are much faster than merge sort algorithm when the data is already sorted. Also not that, quick sort with leftmost pivot have a time complexity of n_square algorithms. Therefore, lefmost pivot is not a successfull strategy when data is in ascending order.  
