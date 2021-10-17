@@ -8,7 +8,7 @@ Created on Thu Sep  9 00:17:26 2021
 
 from linkedKList import DSALinkedList
 import os
-from DSAQueue import queue
+from DSAQueue import queue, priorityQueue
 from DSAHash import DSAHash
 import pickle 
 import numpy as np
@@ -150,19 +150,33 @@ class DSAGraph:
             return v.getDegree()
         return 0
     
-    def _DFS(self, v, visited, T):
-        visited.add(v)
-        for i in v.getAdjacentList():
-            if i.vertex not in visited:
-                T.append([v.getLabel(), i.vertex.getLabel(), i.getWeight()])
-                self._DFS(i.vertex, visited, T)
-        return T
-    
-    def DFS(self):
-        visited = set()
-        T = []
-        T = self._DFS(self.vertices.head.value, visited, T)
-        return T
+    def _findPaths(self, start, target, visited, T, paths):
+        visited.put(start.getLabel(), start)
+        T.insertLast(start.getLabel())
+        # try:
+        #     print(paths.peek().getPath())
+        # except IndexError:
+        #     print('still empty')
+        if start == target:
+            temp = DSALinkedList()
+            for i in T:
+                temp.insertLast(i)
+            paths.insertLast(temp)
+            
+        else:
+            for i in start.getAdjacentList():
+                if not visited.hasKey(i.vertex.getLabel()):
+                    self._findPaths(i.vertex, target, visited, T, paths)
+        T.removeLast()
+        visited.deleteKey(start.getLabel())          
+        
+                    
+    def findPaths(self, start, target):
+        paths = DSALinkedList()
+        visited = DSAHash(10)
+        T = DSALinkedList()
+        self._findPaths(start, target, visited, T, paths)
+        return paths
     
     def _BFS(self, q, visited, T):
         
@@ -245,6 +259,7 @@ class GraphIO():
         if os.path.isfile(filename):
             file = open(filename)
             a = file.readlines()
+            print(a)
             lst = [[i.split(' ')[0], i.split(' ')[1].strip(), i.split(' ')[2].strip()] for i in a]
             for i in lst:
                 self.graph.addEdge(i[0], i[1], i[2])
@@ -273,3 +288,25 @@ class GraphIO():
         with open(filename, "wb") as f:
                 pickle.dump(graph, f)
 
+
+a = DSAGraph()
+for i in ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J']:
+    a.addVertex(i, i)
+    
+
+a.addEdge('A', 'B', 35)
+a.addEdge('A', 'F', 30)
+a.addEdge('A', 'D', 40)
+a.addEdge('B', 'E', 35)
+a.addEdge('C', 'F', 30)
+a.addEdge('D', 'H', 45)
+a.addEdge('E', 'G', 35)
+a.addEdge('D', 'E', 60)
+a.addEdge('F', 'E', 45)
+a.addEdge('H', 'J', 50)
+a.displayList()
+
+b = a.findPaths(a.getVertex('A'), a.getVertex('E'))
+
+for i in b:
+    print(type(i))

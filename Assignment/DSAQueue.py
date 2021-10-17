@@ -10,6 +10,24 @@ code for queues with linked list
 from linkedKList import DSALinkedList
 #change name to list
 
+class queueEntry():
+    
+    def __init__(self):
+        self.__value = None
+        self.__path = None
+        
+    def addValue(self, value):
+        self.__value = value
+        
+    def addPath(self, path):
+        self.__path = path
+        
+    def getValue(self):
+        return self.__value
+    
+    def getPath(self):
+        return self.__path
+
 class queue():
     
     
@@ -44,4 +62,37 @@ class queue():
         else:
             raise IndexError("Queue is empty")
             
+class priorityQueue(queue):
+    
+    def enqueue(self, value, path):
+        qobj = queueEntry()
+        qobj.addValue(value)
+        qobj.addPath(path)
+        self.queueArray.insertLast(qobj)
+        
+    def dequeue(self):
+        maximum = self.queueArray.head.value
+        for i in self.queueArray:
+            if i.getValue() > maximum.getValue():
+                maximum = i
+        self.queueArray.deleteNode(maximum)
+        return maximum
+        
             
+A = priorityQueue()
+A.enqueue(10, "A")
+A.enqueue(20, 'H')
+A.enqueue(5, 'M')
+A.enqueue(50, 'B')
+A.enqueue(15, 'E')
+
+B = A.dequeue()
+print(B.getValue(), B.getPath())
+B = A.dequeue()
+print(B.getValue(), B.getPath())
+B = A.dequeue()
+print(B.getValue(), B.getPath()) 
+B = A.dequeue()
+print(B.getValue(), B.getPath()) 
+B = A.dequeue()
+print(B.getValue(), B.getPath())             

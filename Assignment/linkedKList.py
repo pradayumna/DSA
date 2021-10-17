@@ -3,7 +3,7 @@
 """
 Created on Mon Aug 30 21:21:21 2021
 
-@author: pradyumna agrawl
+@author: pradyumna agrawal
 
 """
 
@@ -100,7 +100,8 @@ class DSALinkedList:
         if (temp is not None):
             if (temp.value == node):
                 self.head = temp.next
-                self.head.prev = None
+                if(self.head):
+                    self.head.prev = None
                 temp = None
                 return
  

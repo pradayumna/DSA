@@ -29,18 +29,16 @@ def __interactiveTestingEnvironment():
             filename = input('please enter the name of the file')
             try:
                 game = Game(filename)
+                gameSet = True
             except ValueError as err:
                 print(err)
                 print('enter new file name as this one is empty')
-                continue
             except FileNotFoundError as err:
                 print(err)
                 print('enter new file name as no such file exists')
-                continue
             except KeyError:
                 print('the file do not have either a functional start or target. please enter a file that has both')
-                continue
-            gameSet = True
+            
             
         else:
             if not gameSet:

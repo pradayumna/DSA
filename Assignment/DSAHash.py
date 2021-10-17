@@ -20,6 +20,13 @@ class DSAHash():
         self.__count = 0
         for i in range(self.__maxSize):
             self.__hashArray[i] = DSAHashEntry()
+            
+    def __iter__(self):
+        count = 0
+        while count < self.__maxSize:
+            if self.__hashArray[count].getKey() is not None:
+                yield self.__hashArray[count] 
+            count += 1
     
     def __str__(self):
         for i in self.__hashArray:
@@ -143,7 +150,7 @@ class DSAHash():
             self.__count -= 1
             if self.getLoadFactor() < 0.10:
                 self.__reSize(2)
-                print("new size is", self.__maxSize)
+                #print("new size is", self.__maxSize)
         else:
             raise KeyError("key not found")
     

@@ -10,8 +10,8 @@ from DSAGraphWithEdge import DSAGraph
 import networkx as nx
 import matplotlib.pyplot as plt
 import random
-from matplotlib.patches import Patch
 from matplotlib.lines import Line2D
+from DSAQueue import priorityQueue
 
 class Game():
     
@@ -20,6 +20,7 @@ class Game():
         self.__NCode = DSAHash(10)
         self.__ECode = DSAHash(10)
         self.__graph = self.__makeGraph()
+        self.__pathQueue = priorityQueue()
         
     def __makeGraph(self):
         #fully functional now
@@ -30,7 +31,7 @@ class Game():
         if len(data) == 0:
             raise ValueError("file is empty")
         graph = DSAGraph()
-        for idx, i in enumerate(data):
+        for idx, i in enumerate(data): #gotta do something for this
             if i[0] != '#':
                 information = i.strip().split(' ')
                 if information != '':
@@ -97,12 +98,12 @@ class Game():
         colorHash = self.__createColorHash()
         edgeList = []
         colList = []
-        for i in self.__graph.vertices:
-            for j in i.getAdjacentList():
+        for i in self.__graph.vertices: #relax, its a self-made iterator. If you dont believe then check my linkedlist code
+            for j in i.getAdjacentList(): #again, self implemented
                 edgeList.append([i.getLabel(), j.vertex.getLabel(), self.__ECode.getData(j.getWeight())])
         G.add_weighted_edges_from(edgeList)
         pos = nx.planar_layout(G)
-        for i in list(G.nodes):
+        for i in list(G.nodes): #sorry, here I had to break the rule. Its for visualising. Its optional, right? 
             colList.append(colorHash.getData(self.__graph.getVertex(i).getData()))
         plt.figure(figsize=(len(list(G.nodes))/2, len(list(G.nodes))/2))
         plt.title("Graphical Visualisation of " + self.__fileName)
@@ -112,18 +113,23 @@ class Game():
         
         
         legend_elements = [Line2D([0], [0], marker='o', color=i.getValue(), label=i.getKey(), markerfacecolor=i.getValue(), markersize=15) for i in colorHash.getHashArray() if i.getKey() is not None]
-        
+        #this thing had to be a list. So I had to use list convention. Again it is for visualisation. I am only taking liberty in this part and I/O part.
         plt.legend(handles=legend_elements, loc='lower right')
         plt.savefig('graph.png')
         plt.close()
         
     def __createColorHash(self):
         colorHash = DSAHash(10)
-        for i in self.__NCode.getHashArray():
-            if i.getKey() is not None:
-                colorHash.put(i.getKey(), "#"+''.join([random.choice('0123456789ABCDEF') for j in range(6)]))
+        for i in self.__NCode: #self made
+            # look for better ways to create colours
+            colorHash.put(i.getKey(), "#"+''.join([random.choice('0123456789ABCDEF') for j in range(6)]))
         return colorHash
     
+    def __calculateCost(self, path):
+        cost = 0
+        for i in path:
+            cost = cost + self.__NCode.getData(self.__graph.getVertex(i).getData())
+        return cost
         
     def nodeOperations(self):
         
@@ -276,8 +282,8 @@ class Game():
     def parameterTweaks(self):
         print('welcome to parameter tweak')
         while True:
-            command = input('You can perform following tweaks\n1. List all Node Codes\n2. List all Edge Codes\n3. Add a Node Code\n4. Update a Node Code\n5. Add an Edge Code\n6. Update an Edge Code\n7. Go back to main menu')
-            if command == '7':
+            command = input('You can perform following tweaks\n1. List all Node Codes\n2. List all Edge Codes\n3. Add a Node Code\n4. Update a Node Code\n5. Add an Edge Code\n6. Update an Edge Code\n7. Change start node\n8. Change target Node\n9. Go back to main menu')
+            if command == '9':
                 return
             
             elif command == '1':
@@ -337,6 +343,21 @@ class Game():
                 except KeyError:
                     print(' Node not found. Add it first\n')
                     
+            elif command == '7':
+                newStart = input('\nPlease enter the node you want to make new starting point')
+                node= self.__graph.getVertex(newStart)
+                if node != None:
+                    self.__Start = node
+                else:
+                    print('\n enter a valid node \n')
+                    
+            elif command == '8':
+                newTarget = input('\nPlease enter the node you want to make new starting point')
+                node= self.__graph.getVertex(newTarget)
+                if node != None:
+                    self.__Target = node
+                else:
+                    print('\n enter a valid node \n')
             else:
                 print('\ncommand not identified\n')
                 
@@ -355,34 +376,43 @@ class Game():
             file = input('please enter the name of file that you want to save into')
             f = open(file, 'w')
         matrix = self.__graph.displayMatrix()
-        for i in range(1, len(matrix)):
-            for j in range(1, len(matrix)):
+        i = 1
+        while i < len(matrix):
+            j = 1
+            while j < len(matrix):
+                
                 if matrix[i][j] != 0:
                     matrix[i][j] = self.__ECode.getData(matrix[i][j])
+                j = j +1
+            i = i + 1
         matrix[0][0] = '/'
-        for i in range(len(matrix)):
-            for j in range(len(matrix)):
+        i = 0
+        while i < len(matrix):
+            j = 0
+            while j < len(matrix):
+                
                 print(matrix[i][j], end = ' ')
                 if toSave == True:
                     f.write(str(matrix[i][j]) + ' ')
+                j = j +1
             print()
             if toSave == True:
                 f.write('\n')
-        
+            i = i + 1
     def displayWorld(self):
         print('display world')
         command = input('There are three things that you can do\n1. Display information about features\n2. Save information about features\n3. Save a visual representation of the world')
         if command == '1':
             print('\n\n\n' + '-'*20)
             print('The world has ' + str(self.__graph.getVertexCount()) + ' Nodes\n')
-            for i in self.__graph.vertices:
+            for i in self.__graph.vertices: #self made iterator
                 print(i.getLabel(), i.getData())
                 
             print('\n' + '-'*20 + '\n')
             
             print('The world has ' + str(self.__graph.getEdgeCount()) + ' Edges\n')
-            for i in self.__graph.vertices:
-                for j in i.getAdjacentList():
+            for i in self.__graph.vertices: #self made iterator
+                for j in i.getAdjacentList(): #self made iterator
                     print(i.getLabel(), j.vertex.getLabel(), j.getWeight())
             
             print('\n' + '-'*20 + '\n')
@@ -396,36 +426,63 @@ class Game():
             filename = input('please enter the name of file in which you want to save information')
             file = open(filename, 'w')
             file.write('The world has ' + str(self.__graph.getVertexCount()) + ' Nodes\n')
-            for i in self.__graph.vertices:
+            for i in self.__graph.vertices: #self made iterator
                 file.write(i.getLabel() + ' ' + i.getData() + '\n')
                 
             file.write('\n' + '-'*20 + '\n')
             
             file.write('The world has ' + str(self.__graph.getEdgeCount()) + ' Edges\n')
-            for i in self.__graph.vertices:
-                for j in i.getAdjacentList():
+            for i in self.__graph.vertices: #self made iterator
+                for j in i.getAdjacentList(): #self made iterator
                     file.write(i.getLabel() + ' ' + j.vertex.getLabel() + ' ' + j.getWeight() + '\n')
                     
             file.write('\n' + '-'*20 + '\n')
             file.write('The world has following NCodes:\n')
-            for i in self.__NCode.getHashArray():
-                if i.getKey() != None:
+            for i in self.__NCode: #self made iterator
                     file.write(i.getKey() + ' ' + str(i.getValue()) + '\n')
             file.write('\n' + '-'*20 + '\n')
             file.write('The world has following ECodes:\n')
-            for i in self.__ECode.getHashArray():
-                if i.getKey() != None:
+            for i in self.__ECode: #self made iterator
                     file.write(i.getKey() + ' ' + str(i.getValue()) + '\n')
                     
         if command == '3':
             self.__visualise()
-            
+    
 
     def generateRoutes(self):
         print('generate Route')
+        self.__pathList = self.__graph.findPaths(self.__Start, self.__Target)
+        for i in self.__pathList:
+            cost = self.__calculateCost(i)
+            self.__pathQueue.enqueue(cost, i)
         
     def displayRoutes(self):
         print('display routes')
+        
+        number = input('How many top routes you want to display? \nplease enter an integer.\nenter -a to display all paths')
+        toSave = input('do you want to save the matrix as well?enter 0 for no and 1 for yes')
+        num = 1
+        if toSave == '1':
+            fname = input('please enter the name of the file where you want to save')
+            file = open(fname, 'w')
+        if number == '-a':
+            factor = True
+        else:
+            factor = False
+            try:
+                num = int(number)
+            except ValueError:
+                print('bad output')
+                return
+        count = 0
+        while not self.__pathQueue.isEmpty() and (factor or count < num):
+            qobj = self.__pathQueue.dequeue()
+            if toSave == '1':
+                file.write(str(qobj.getValue()) + '  ' + str(qobj.getPath()) + '\n')
+            else:
+                print(qobj.getValue(), qobj.getPath())
+            count = count + 1
+            
         
     def saveNetwork(self):
         print('save network')
