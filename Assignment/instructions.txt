@@ -1,0 +1,11 @@
+Welcome to the game of life. 
+
+There are two modes through which you can run this code 
+
+Mode 1 - Interective testing environment
+
+usage python3 gameofcatz.py -i
+
+Mode 2 - Simulation mode 
+
+usage: python3 gameofcatz -s infile savefile

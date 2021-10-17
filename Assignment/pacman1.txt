@@ -1,0 +1,281 @@
+# Node types
+Ncode Pellet 10
+Ncode PowerPellet 50
+Ncode Fruit 100
+Ncode Blinky 200
+Ncode Pinky 400
+Ncode Inky 800
+Ncode Clyde 1600
+# Define nodes and labels
+Node NW1 Pellet
+Node NW2 Pellet
+Node NW3 Pellet
+#Node NW4 Pellet
+Node NW5 Pellet
+Node NW6 Pellet
+Node NW7 Pellet
+Node NW8 Pellet
+Node NW9 Pellet
+Node NW10 Pellet
+Node NW11 Pellet
+Node NW12 Pellet
+Node NW13 Pellet
+Node NW14 Pellet
+Node NW15 Pellet
+Node NW16 Pellet
+Node NE1 Pellet
+Node NE2 Pellet
+Node NE3 Pellet
+Node NE4 Pellet
+Node NE5 Pellet
+Node NE6 Pellet
+Node NE7 Pellet
+Node NE8 Pellet
+Node NE9 Pellet
+Node NE10 Pellet
+Node NE11 Pellet
+Node NE12 Pellet
+Node NE13 Pellet
+Node NE14 Pellet
+Node NE15 Pellet
+Node NE16 Pellet
+Node SW1 Pellet
+Node SW2 Pellet
+Node SW3 Pellet
+Node SW4 Pellet
+Node SW5 Pellet
+Node SW6 Pellet
+Node SW7 Pellet
+Node SW8 Pellet
+Node SW9 Pellet
+Node SW10 Pellet
+Node SW11 Pellet
+Node SW12 Pellet
+Node SW13 Pellet
+Node SW14 Pellet
+Node SW15 Pellet
+Node SW16 Pellet
+Node SE1 Pellet
+Node SE2 Pellet
+Node SE3 Pellet
+Node SE4 Pellet
+Node SE5 Pellet
+Node SE6 Pellet
+Node SE7 Pellet
+Node SE8 Pellet
+Node SE9 Pellet
+Node SE10 Pellet
+Node SE11 Pellet
+Node SE12 Pellet
+Node SE13 Pellet
+Node SE14 Pellet
+Node SE15 Pellet
+Node SE16 Pellet
+Node P1 PowerPellet
+Node P2 PowerPellet
+Node P3 PowerPellet
+Node P4 PowerPellet
+Node M1 Pellet
+Node M2 Fruit
+Node NW4 Blinky
+# Edge types - is a standard 1 unit per edge, 2 = 2 units etc, P = portal, zero units
+Ecode - 1
+Ecode 1 1
+Ecode 2 2
+Ecode 3 3
+Ecode 4 4
+Ecode 5 5
+Ecode 6 6
+Ecode P 0
+Ecode 11 11
+# Define edges
+Edge NW1 NW2 5
+Edge NW2 NW1 5
+Edge NW3 NW2 6
+Edge NW2 NW3 6
+Edge NW1 P1 2
+Edge P1 NW1 2
+Edge NW4 P1 2
+Edge P1 NW4 2
+Edge NW5 NW2 4
+Edge NW2 NW5 4
+Edge NW3 NW6 4
+Edge NW6 NW3 4
+Edge NW4 NW5 5
+Edge NW5 NW4 5
+Edge NW5 NW6 3
+Edge NW6 NW5 3
+Edge NW7 NW6 3
+Edge NW6 NW7 3
+Edge NW4 NW8 3
+Edge NW8 NW4 3
+Edge NW5 NW9 3
+Edge NW9 NW5 3
+Edge NW6 NW10 3
+Edge NW10 NW6 3
+Edge NW8 NW9 5
+Edge NW9 NW8 5
+Edge NW10 NW11 3
+Edge NW11 NW10 3
+Edge NW11 NW13 3
+Edge NW13 NW11 3
+Edge NW12 NW13 3
+Edge NW13 NW12 3
+Edge NW9 NW15 6
+Edge NW15 NW9 6
+Edge NW14 NW15 5
+Edge NW15 NW14 5
+Edge NW15 NW16 3
+Edge NW16 NW15 3
+Edge NE1 NE2 5
+Edge NE2 NE1 5
+Edge NE3 NE2 6
+Edge NE2 NE3 6
+Edge NE1 P2 2
+Edge P2 NE1 2
+Edge NE4 P2 2
+Edge P2 NE4 2
+Edge NE5 NE2 4
+Edge NE2 NE5 4
+Edge NE3 NE6 4
+Edge NE6 NE3 4
+Edge NE4 NE5 5
+Edge NE5 NE4 5
+Edge NE5 NE6 3
+Edge NE6 NE5 3
+Edge NE7 NE6 3
+Edge NE6 NE7 3
+Edge NE4 NE8 3
+Edge NE8 NE4 3
+Edge NE5 NE9 3
+Edge NE9 NE5 3
+Edge NE6 NE10 3
+Edge NE10 NE6 3
+Edge NE8 NE9 5
+Edge NE9 NE8 5
+Edge NE10 NE11 3
+Edge NE11 NE10 3
+Edge NE11 NE13 3
+Edge NE13 NE11 3
+Edge NE12 NE13 3
+Edge NE13 NE12 3
+Edge NE9 NE15 6
+Edge NE15 NE9 6
+Edge NE14 NE15 5
+Edge NE15 NE14 5
+Edge NE15 NE16 3
+Edge NE16 NE15 3
+Edge NW7 NE7 3
+Edge NW13 NE13 3
+Edge NW14 NE14 P
+Edge SW1 SW2 11
+Edge SW2 SW1 11
+Edge SW1 SW3 3
+Edge SW3 SW1 3
+Edge SW2 SW7 3
+Edge SW7 SW2 3
+Edge SW3 SW4 2
+Edge SW4 SW3 2
+Edge SW4 SW5 3
+Edge SW5 SW4 3
+Edge SW6 SW7 3
+Edge SW7 SW6 3
+Edge SW8 SW4 3
+Edge SW4 SW8 3
+Edge SW9 SW5 3
+Edge SW4 SW9 3
+Edge SW10 SW6 3
+Edge SW6 SW10 3
+Edge P3 SW8 2
+Edge SW8 P3 2
+Edge SW9 SW10 3
+Edge SW10 SW9 3
+Edge SW10 SW11 3
+Edge SW11 SW10 3
+Edge M1 SW11 1
+Edge SW11 M1 1
+Edge P3 SW12 3
+Edge SW12 P3 3
+Edge SW12 SW13 5
+Edge SW13 SW12 5
+Edge SW13 SW14 3
+Edge SW14 SW13 3
+Edge SW14 SW15 3
+Edge SW15 SW14 3
+Edge SW15 SW11 3
+Edge SW11 SW15 3
+Edge NW15 SW13 6
+Edge SW13 NW15 6
+Edge NW16 SW16 6
+Edge SW16 NW16 6
+Edge M2 SW16 4
+Edge SW16 M2 4
+Edge SW2 SE2 3
+Edge SE2 SW2 3
+Edge SE1 SE2 11
+Edge SE2 SE1 11
+Edge SE1 SE3 3
+Edge SE3 SE1 3
+Edge SE2 SE7 3
+Edge SE7 SE2 3
+Edge SE3 SE4 2
+Edge SE4 SE3 2
+Edge SE4 SE5 3
+Edge SE5 SE4 3
+Edge SE6 SE7 3
+Edge SE7 SE6 3
+Edge SE8 SE4 3
+Edge SE4 SE8 3
+Edge SE9 SE5 3
+Edge SE4 SE9 3
+Edge SE10 SE6 3
+Edge SE6 SE10 3
+Edge P4 SE8 2
+Edge SE8 P4 2
+Edge SE9 SE10 3
+Edge SE10 SE9 3
+Edge SE10 SE11 3
+Edge SE11 SE10 3
+Edge M1 SE11 1
+Edge SE11 M1 1
+Edge P4 SE12 3
+Edge SE12 P4 3
+Edge SE12 SE13 5
+Edge SE13 SE12 5
+Edge SE13 SE14 3
+Edge SE14 SE13 3
+Edge SE14 SE15 3
+Edge SE15 SE14 3
+Edge SE15 SE11 3
+Edge SE11 SE15 3
+Edge NE15 SE13 6
+Edge SE13 NE15 6
+Edge NE16 SE16 6
+Edge SE16 NE16 6
+Edge M2 SE16 4
+Edge SE16 M2 4
+# Define Start and Target(s)
+Start M1
+Target NW4
+
+# https://pacman.fandom.com/wiki/Pac-Man_(game)
+#    Pac-Dot - 10 points.
+#    Power Pellet - 50 points.
+#        Vulnerable Ghosts:
+#        #1 in succession - 200 points.
+#        #2 in succession - 400 points.
+#        #3 in succession - 800 points.
+#        #4 in succession - 1600 points.
+#    Fruit:
+#        🍒 Cherry: 100 points.
+#        🍓 Strawberry: 300 points
+#        🍊 Orange: 500 points
+#        🍎 Apple: 700 points
+#        🍈 Melon: 1000 points
+#        PM Galaxian.png Galaxian Flagship: 2000 points
+#        🔔 Bell: 3000 points
+#        🔑 Key: 5000 points
+#Blinky
+#Pinky
+#Inky
+#Clyde

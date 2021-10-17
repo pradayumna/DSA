@@ -1,0 +1,12 @@
+Select one of the following commands: 
+
+1. Load Input File
+2. Node Operations (find, insert, delete, update)
+3. Edge Operations (find, add, remove, update)
+4. Parameter tweaks
+5. Display graph
+6. Display world
+7. Generate routes
+8. Display routes
+9. Save network
+10. Exit

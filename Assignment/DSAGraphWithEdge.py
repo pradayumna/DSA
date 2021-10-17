@@ -9,7 +9,9 @@ Created on Thu Sep  9 00:17:26 2021
 from linkedKList import DSALinkedList
 import os
 from DSAQueue import queue
+from DSAHash import DSAHash
 import pickle 
+import numpy as np
 
 class DSAGraph:
     
@@ -37,6 +39,16 @@ class DSAGraph:
         else:
             return None
         
+    def deleteVertex(self, label):
+        if self.hasVertex(label):
+            for i in self.vertices:
+                adjList = i.getAdjacentList()
+                for j in adjList:
+                    if j.vertex.getLabel() == label:
+                        adjList.deleteNode(j)
+            self.vertices.deleteNode(self.getVertex(label))
+            
+        
     def getVertexCount(self):
         count = 0
         for i in self.vertices:
@@ -58,9 +70,9 @@ class DSAGraph:
         if not self.isAdjacent(label1, label2):
            
             v1 = self.getVertex(label1)
-            print('hi')
             v2 = self.getVertex(label2)
             v1.addAdjacent(v2, value)
+            
 
     
     def isAdjacent(self, label1, label2):
@@ -72,7 +84,34 @@ class DSAGraph:
                 if label == label2:
                     return True
         return False
-        
+    
+    def deleteEdge(self, label1, label2):
+        v1 = self.getVertex(label1)
+        if(v1):
+            adjacentList = v1.getAdjacentList()
+            for j in adjacentList:
+                label = j.vertex.getLabel()
+                if label == label2:
+                    adjacentList.deleteNode(j)
+                    
+    def updateEdge(self, label1, label2, Ecode):
+        v1 = self.getVertex(label1)
+        if(v1):
+            adjacentList = v1.getAdjacentList()
+            for j in adjacentList:
+                label = j.vertex.getLabel()
+                if label == label2:
+                    j.setWeight(Ecode)
+                    
+    
+    def getEdgeWeight(self, label1, label2):
+        v1 = self.getVertex(label1)
+        if(v1):
+            adjacentList = v1.getAdjacentList()
+            for j in adjacentList:
+                label = j.vertex.getLabel()
+                if label == label2:
+                    return j.getWeight()
     
     def getEdgeCount(self):
         count = 0
@@ -80,7 +119,7 @@ class DSAGraph:
             adjacentList = i.getAdjacentList()
             for j in adjacentList:
                 count = count + 1
-        return int(count)
+        return int(count/2)
             
     def displayList(self):
         for i in self.vertices:
@@ -91,6 +130,20 @@ class DSAGraph:
                 label = j.vertex.getLabel()
                 print(str(label), end = " ")
             print()
+            
+    def displayMatrix(self):
+        count = 0
+        for i in self.vertices:
+            count += 1
+        vertexHash = DSAHash(count)
+        matrix = np.zeros([count+1, count+1], dtype = object)
+        for idx, i in enumerate(self.vertices): 
+            matrix[idx+1][0] = matrix[0][idx+1] = i.getLabel()
+            vertexHash.put(i.getLabel(), idx+1)
+        for i in self.vertices:
+            for j in i.vertexList:
+                matrix[vertexHash.getData(i.getLabel())][vertexHash.getData(j.vertex.getLabel())] = j.getWeight()
+        return matrix
             
     def degree(self, label):
         v = self.getVertex(label)
@@ -144,7 +197,7 @@ class DSAGraphVertex():
         self.vertexList = DSALinkedList()
         
     def __str__(self):
-        return self.label, self.data
+        return self.data
 
         
     def getLabel(self):
@@ -152,6 +205,9 @@ class DSAGraphVertex():
     
     def getData(self):
         return self.data
+    
+    def updateData(self, data):
+        self.data = data
     
     def getAdjacentList(self):
         return self.vertexList
@@ -178,6 +234,9 @@ class DSAGraphEdge():
         
     def getWeight(self):
         return self.value
+    
+    def setWeight(self, weight):
+        self.value = weight
         
         
 class GraphIO():

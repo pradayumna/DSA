@@ -79,12 +79,16 @@ def doSort(n, sortType, arrayType):
             DSAsorts.insertionSort(A)
         elif sortType == "m":
             DSAsorts.mergeSort(A)
+            print(A)
         elif sortType == "q":
             DSAsorts.quickSort(A)
+            print(A)
         elif sortType == "3":
             DSAsorts.quickSortMedian3(A)
+            print(A)
         elif sortType == "l":
             DSAsorts.quickSortRandom(A)
+            print(A)
         else:
             print("Unsupported sort algorithm")
 
