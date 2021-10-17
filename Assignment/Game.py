@@ -7,6 +7,11 @@ Created on Sat Oct 16 22:13:47 2021
 """
 from DSAHash import DSAHash
 from DSAGraphWithEdge import DSAGraph
+import networkx as nx
+import matplotlib.pyplot as plt
+import random
+from matplotlib.patches import Patch
+from matplotlib.lines import Line2D
 
 class Game():
     
@@ -85,6 +90,40 @@ class Game():
         if not Start or not Target:
             raise KeyError()
         return graph
+    
+    def __visualise(self):
+        G = nx.DiGraph()
+        # I am going to use list for the next trick. Pardon me.
+        colorHash = self.__createColorHash()
+        edgeList = []
+        colList = []
+        for i in self.__graph.vertices:
+            for j in i.getAdjacentList():
+                edgeList.append([i.getLabel(), j.vertex.getLabel(), self.__ECode.getData(j.getWeight())])
+        G.add_weighted_edges_from(edgeList)
+        pos = nx.planar_layout(G)
+        for i in list(G.nodes):
+            colList.append(colorHash.getData(self.__graph.getVertex(i).getData()))
+        plt.figure(figsize=(len(list(G.nodes))/2, len(list(G.nodes))/2))
+        plt.title("Graphical Visualisation of " + self.__fileName)
+        nx.draw_networkx(G, pos, with_labels = True, node_color = colList)
+        labels = nx.get_edge_attributes(G,'weight')
+        nx.draw_networkx_edge_labels(G, pos, edge_labels=labels)
+        
+        
+        legend_elements = [Line2D([0], [0], marker='o', color=i.getValue(), label=i.getKey(), markerfacecolor=i.getValue(), markersize=15) for i in colorHash.getHashArray() if i.getKey() is not None]
+        
+        plt.legend(handles=legend_elements, loc='lower right')
+        plt.savefig('graph.png')
+        plt.close()
+        
+    def __createColorHash(self):
+        colorHash = DSAHash(10)
+        for i in self.__NCode.getHashArray():
+            if i.getKey() is not None:
+                colorHash.put(i.getKey(), "#"+''.join([random.choice('0123456789ABCDEF') for j in range(6)]))
+        return colorHash
+    
         
     def nodeOperations(self):
         
@@ -332,7 +371,56 @@ class Game():
         
     def displayWorld(self):
         print('display world')
+        command = input('There are three things that you can do\n1. Display information about features\n2. Save information about features\n3. Save a visual representation of the world')
+        if command == '1':
+            print('\n\n\n' + '-'*20)
+            print('The world has ' + str(self.__graph.getVertexCount()) + ' Nodes\n')
+            for i in self.__graph.vertices:
+                print(i.getLabel(), i.getData())
+                
+            print('\n' + '-'*20 + '\n')
+            
+            print('The world has ' + str(self.__graph.getEdgeCount()) + ' Edges\n')
+            for i in self.__graph.vertices:
+                for j in i.getAdjacentList():
+                    print(i.getLabel(), j.vertex.getLabel(), j.getWeight())
+            
+            print('\n' + '-'*20 + '\n')
+            print('The world has following NCodes:\n')
+            print(self.__NCode)
+            print('\n' + '-'*20 + '\n')
+            print('The world has following ECodes:\n')
+            print(self.__ECode)
         
+        if command == '2':
+            filename = input('please enter the name of file in which you want to save information')
+            file = open(filename, 'w')
+            file.write('The world has ' + str(self.__graph.getVertexCount()) + ' Nodes\n')
+            for i in self.__graph.vertices:
+                file.write(i.getLabel() + ' ' + i.getData() + '\n')
+                
+            file.write('\n' + '-'*20 + '\n')
+            
+            file.write('The world has ' + str(self.__graph.getEdgeCount()) + ' Edges\n')
+            for i in self.__graph.vertices:
+                for j in i.getAdjacentList():
+                    file.write(i.getLabel() + ' ' + j.vertex.getLabel() + ' ' + j.getWeight() + '\n')
+                    
+            file.write('\n' + '-'*20 + '\n')
+            file.write('The world has following NCodes:\n')
+            for i in self.__NCode.getHashArray():
+                if i.getKey() != None:
+                    file.write(i.getKey() + ' ' + str(i.getValue()) + '\n')
+            file.write('\n' + '-'*20 + '\n')
+            file.write('The world has following ECodes:\n')
+            for i in self.__ECode.getHashArray():
+                if i.getKey() != None:
+                    file.write(i.getKey() + ' ' + str(i.getValue()) + '\n')
+                    
+        if command == '3':
+            self.__visualise()
+            
+
     def generateRoutes(self):
         print('generate Route')
         

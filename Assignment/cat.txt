@@ -28,24 +28,25 @@ Node I F
 Node J -
 # Edge types - is a standard 1 unit per edge
 Ecode - 1
-Ecode + 2
+Ecode + 5
+Ecode * 10
 # Define edges
-Edge A B -
+#Edge A B -
 Edge A E +
 Edge B Q -
-Edge B E -
+#Edge B E -
 Edge B F -
 Edge B C -
 Edge C B -
 Edge C F -
 Edge C G -
-Edge C D -
+Edge C D +
 Edge D C -
-Edge D G -
-Edge E A -
+Edge D G *
+Edge E A +
 Edge E B -
 Edge E F -
-Edge E H -
+Edge E H +
 Edge F B -
 Edge F C -
 Edge F E -
@@ -53,11 +54,11 @@ Edge F G -
 Edge F H -
 Edge F I -
 Edge G C -
-Edge G D -
+Edge G D *
 Edge G F -
 Edge G I -
 Edge H E -
-Edge H F -
+Edge H F *
 Edge H I -
 Edge H J -
 Edge I F -

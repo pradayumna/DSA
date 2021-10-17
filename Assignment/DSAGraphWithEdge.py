@@ -133,8 +133,7 @@ class DSAGraph:
             
     def displayMatrix(self):
         count = 0
-        for i in self.vertices:
-            count += 1
+        count = self.getVertexCount()
         vertexHash = DSAHash(count)
         matrix = np.zeros([count+1, count+1], dtype = object)
         for idx, i in enumerate(self.vertices): 

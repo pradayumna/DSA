@@ -106,7 +106,6 @@ class DSAHash():
             self.__count += 1
             if self.getLoadFactor() > 0.60:
                 self.__reSize(1)
-                print("new size is", self.__maxSize)
     
     
     def get(self, key):
