@@ -19,6 +19,7 @@ class DSALinkedList:
     
     def __init__(self):
         self.head = self.tail = None
+        self.count = 0
     
         #ITERATOR
     def __iter__(self):
@@ -39,6 +40,7 @@ class DSALinkedList:
     def insertFirst(self, value):
         newNd = DSAListNode(value)
         
+        self.count = self.count + 1
         if self.isEmpty():
             self.head = self.tail = newNd
         else:
@@ -48,6 +50,7 @@ class DSALinkedList:
             
     def insertLast(self, value):
         
+        self.count = self.count + 1
         newNd = DSAListNode(value)
         if self.isEmpty():
             self.head = self.tail = newNd
@@ -78,6 +81,7 @@ class DSALinkedList:
                 self.head.prev = None
             else:
                 self.tail = None
+            self.count = self.count - 1
             return nodeValue
         
     def removeLast(self):
@@ -89,6 +93,7 @@ class DSALinkedList:
                 self.tail.next = None
             else:
                 self.head = None
+            self.count = self.count - 1
             return nodeValue
     
     def deleteNode(self, node):
@@ -103,17 +108,22 @@ class DSALinkedList:
                 if(self.head):
                     self.head.prev = None
                 temp = None
+                self.count = self.count - 1
                 return
  
         # Search for the key to be deleted, keep track of the
         # previous node as we need to change 'prev.next'
         while(temp is not None):
             if temp.value == node:
+                self.count = self.count - 1
                 temp.prev.next = temp.next
                 if temp.next:
                     temp.next.prev = temp.prev
                 break
             temp = temp.next
+            
+    def getCount(self):
+        return self.count
  
 
         

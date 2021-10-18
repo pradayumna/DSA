@@ -8,7 +8,7 @@ Created on Thu Sep  9 00:17:26 2021
 
 from linkedKList import DSALinkedList
 import os
-from DSAQueue import queue, priorityQueue
+from DSAQueue import queue
 from DSAHash import DSAHash
 import pickle 
 import numpy as np

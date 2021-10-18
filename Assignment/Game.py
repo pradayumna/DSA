@@ -12,6 +12,7 @@ import matplotlib.pyplot as plt
 import random
 from matplotlib.lines import Line2D
 from DSAQueue import priorityQueue
+import pickle
 
 class Game():
     
@@ -129,155 +130,278 @@ class Game():
         cost = 0
         for i in path:
             cost = cost + self.__NCode.getData(self.__graph.getVertex(i).getData())
+        i = 0
+        node = path.head
+        while (i < path.getCount() - 1):
+            cost = cost + self.__ECode.getData(self.__graph.getEdgeWeight(node.value, node.next.value))
+            i = i + 1
+            node = node.next
         return cost
         
+    
+    def __lookForNode(self, ndLabel):
+        node = self.__graph.getVertex(ndLabel)
+        if not node:
+            print('this node does not exist')
+        else:
+            print('this node exists')
+            print('(Node, value): (' + ndLabel + ', ' + str(node.getData()) + ')')
+            
+    def __addNode(self, ndLabel, Ncode):
+        if self.__graph.hasVertex(ndLabel):
+            print('The node already exists. Probably you want to update it')
+        else:
+            if not self.__NCode.hasKey(Ncode):
+                print('this node code does not exists')
+            else:
+                self.__graph.addVertex(ndLabel, Ncode)
+                print('\nNode added\n')
+            
+    def __deleteNode(self, ndLabel):
+        if not self.__graph.hasVertex(ndLabel):
+            print('The node does not even exists')
+        else:
+            self.__graph.deleteVertex(ndLabel)
+            print('\nNode deleted\n')
+            
+    def __updateNode(self, ndLabel, Ncode):
+        if not self.__graph.hasVertex(ndLabel):
+            print('The node does not even exists')
+        else:
+            if not self.__NCode.hasKey(Ncode):
+                print('this node code does not exists')
+            else:
+                self.__graph.getVertex(ndLabel).updateData(Ncode)
+                print('\nNode Updated\n')
+            
+    def __lookEdge(self, ndLabel1, ndLabel2):
+        node1 = self.__graph.getVertex(ndLabel1)
+        node2 = self.__graph.getVertex(ndLabel2)
+        if not node1 or not node2:
+            print('one of the nodes do not exist. Maybe try adding the nodes first')
+        else:
+            if not self.__graph.isAdjacent(ndLabel1, ndLabel2):
+                print('this edge do not exist')
+            else:
+                print('this edge exists')
+                print('(from-Node, to-Node, value): (' + ndLabel1 + ', ' + ndLabel2 + ', ' + self.__graph.getEdgeWeight(ndLabel1, ndLabel2) + ')')
+        
+    def __addEdge(self, ndLabel1, ndLabel2, Ecode):
+         node1 = self.__graph.getVertex(ndLabel1)
+         node2 = self.__graph.getVertex(ndLabel2)
+         if not node1 or not node2:
+             print('one of the nodes do not exist. maybe add them first')
+         else:
+             if self.__graph.isAdjacent(ndLabel1, ndLabel2):
+                 print('this edge already exist. You might want to update it')
+             else:
+                 if not self.__ECode.hasKey(Ecode):
+                     print('this node code does not exists')
+                 else:
+                     self.__graph.addEdge(ndLabel1, ndLabel2, Ecode)
+                     print('\n edge added\n')
+                     
+    def __deleteEdge(self, ndLabel1, ndLabel2):
+        node1 = self.__graph.getVertex(ndLabel1)
+        node2 = self.__graph.getVertex(ndLabel2)
+        if not node1 or not node2:
+            print('one of the nodes do not exist. maybe add them first')
+                    
+        else:
+            if not self.__graph.isAdjacent(ndLabel1, ndLabel2):
+                print('this edge does not exist so do not worry about deleting it')
+            else:
+                self.__graph.deleteEdge(ndLabel1, ndLabel2)
+                print('\edge deleted\n')
+                
+    def __updateEdge(self, ndLabel1, ndLabel2, Ecode):
+        node1 = self.__graph.getVertex(ndLabel1)
+        node2 = self.__graph.getVertex(ndLabel2)
+        if not node1 or not node2:
+            print('one of the nodes do not exist. maybe add them first')
+                    
+        else:
+            if not self.__graph.isAdjacent(ndLabel1, ndLabel2):
+                print('this edge does not exist so try adding it first')
+            else:
+                if not self.__ECode.hasKey(Ecode):
+                    print('this node code does not exists')
+                else:
+                    self.__graph.updateEdge(ndLabel1, ndLabel2, Ecode)
+                    print('\nedge updated\n')
+                    
+    def __addNcode(self, Ncode, value):
+        try:
+            self.__NCode.put(Ncode, int(value))
+            print('\nNode Code Added\n')
+        except ValueError:
+            print('Value of Node Code is invalid. it has to be an integer\n')
+        except KeyError:
+            print(' Node code is invalid as it already exists\n')
+            
+    def __updateNcode(self, Ncode, value):
+        try:
+            self.__NCode.updateData(Ncode, int(value))
+            print('\nNode Code updated\n')
+        except ValueError:
+            print('Value of Node Code is invalid. it has to be an integer\n')
+        except KeyError:
+                print(' Node not found. Add it first\n')
+                
+    def __addEcode(self, Ecode, value):
+        try:
+            self.__ECode.put(Ecode, int(value))
+            print('\nEdge Code Added\n')
+        except ValueError:
+            print('Value of Node Code is invalid. it has to be an integer\n')
+        except KeyError:
+            print(' Node code is invalid as it already exists\n')
+        
+    def __updateEcode(self, Ecode, value):
+        try:
+            self.__ECode.updateData(Ecode, int(value))
+            print('\nEdge Code updated\n')
+        except ValueError:
+            print('Value of Node Code is invalid. it has to be an integer\n')
+        except KeyError:
+            print(' Node not found. Add it first\n')
+            
+    def __setStart(self, newStart):
+        
+        node= self.__graph.getVertex(newStart)
+        if node != None:
+            self.__Start = node
+        else:
+            print('\n enter a valid node \n')
+            
+    def __setTarget(self, newTarget):
+        node= self.__graph.getVertex(newTarget)
+        if node != None:
+            self.__Target = node
+        else:
+            print('\n enter a valid node \n')
+            
+    def __displayGraph(self, f, toSave):
+        matrix = self.__graph.displayMatrix()
+        i = 1
+        while i < len(matrix):
+            j = 1
+            while j < len(matrix):
+                
+                if matrix[i][j] != 0:
+                    matrix[i][j] = self.__ECode.getData(matrix[i][j])
+                j = j +1
+            i = i + 1
+        matrix[0][0] = '/'
+        i = 0
+        while i < len(matrix):
+            j = 0
+            while j < len(matrix):
+                
+                print(matrix[i][j], end = ' ')
+                if toSave == '1':
+                    f.write(str(matrix[i][j]) + ' ')
+                j = j +1
+            print()
+            if toSave == '1':
+                f.write('\n')
+            i = i + 1
+            
+    def __displayRoutes(self, number, toSave, file):
+        num = 1
+        if number == '-a':
+            factor = True
+        else:
+            factor = False
+            try:
+                num = int(number)
+            except ValueError:
+                print('bad output')
+                return
+        count = 0
+        
+        while not self.__pathQueue.isEmpty() and (factor or count < num):
+            qobj = self.__pathQueue.dequeue()
+            if toSave == '1':
+                file.write(str(qobj.getValue()) + '  ' + str(qobj.getPath()) + '\n')
+            else:
+                print(qobj.getValue(), qobj.getPath())
+            count = count + 1
+        
+    
     def nodeOperations(self):
         
         #complete
         print('welcome to node operation')
         while(True):
+            
+            
             command = input('Choose one of the following possible operations\n1. Look for a node\n2. Add a new node\n3. delete an existing node\n4. update a node\n5. Exit Node Operations')
             if command == '5':
                 return
+            
             elif command == '1':
                 ndLabel = input('please enter the name of the node')
-                node = self.__graph.getVertex(ndLabel)
-                if not node:
-                    print('this node does not exist')
-                else:
-                    print('this node exists')
-                    print('(Node, value): (' + ndLabel + ', ' + str(node.getData()) + ')')
-                    
+                self.__lookForNode(ndLabel)
+                
             elif command == '2':
                 ndLabel = input('please enter the name of the node that you want to add')
-                if self.__graph.hasVertex(ndLabel):
-                    print('The node already exists. Probably you want to update it')
-                else:
-                    print('choose among the following NCodes')
-                    print(self.__NCode)
-                    Ncode = input()
-                    if not self.__NCode.hasKey(Ncode):
-                        print('this node code does not exists')
-                    else:
-                        self.__graph.addVertex(ndLabel, Ncode)
-                        print('\nNode added\n')
-                    
+                print('choose among the following NCodes')
+                print(self.__NCode)
+                Ncode = input()
+                self.__addNode(ndLabel, Ncode)
+
             elif command == '3':
                 ndLabel = input('please enter the name of the node that you want to delete')
-                if not self.__graph.hasVertex(ndLabel):
-                    print('The node does not even exists')
-                else:
-                    self.__graph.deleteVertex(ndLabel)
-                    print('\nNode deleted\n')
-            
+                self.__deleteNode(ndLabel)
+
             elif command == '4':
                 ndLabel = input('please enter the name of the node that you want to update')
-                if not self.__graph.hasVertex(ndLabel):
-                    print('The node does not even exists')
-                else:
-                    print('currently Node Code at vertex ' + ndLabel + ' is ' + self.__graph.getVertex(ndLabel).getData())
-                    print('choose among the following NCodes')
-                    print(self.__NCode)
-                    Ncode = input()
-                    if not self.__NCode.hasKey(Ncode):
-                        print('this node code does not exists')
-                    else:
-                        self.__graph.getVertex(ndLabel).updateData(Ncode)
-                        print('\nNode Updated\n')
-                        
+                print('choose among the following NCodes')
+                print(self.__NCode)
+                Ncode = input()
+                self.__updateNode(ndLabel, Ncode)
+                
             else:
                 print('sorry command not identified')
-                    
-                    
+                                  
                 
     def edgeOperations(self):
         
         #complete
         print('Welcome to edge operation')
         while(True):
-            command = input('Choose one of the following possible operations\n1. Look for an edge\n2. Add a new edge\n3. delete an existing edge\n4. update an edge\n5. Exit Node Operations')
             
+            command = input('Choose one of the following possible operations\n1. Look for an edge\n2. Add a new edge\n3. delete an existing edge\n4. update an edge\n5. Exit Node Operations')
             if command == '5':
                     return
                 
             elif command == '1':
                 ndLabel1 = input('please enter the name of the from-node')
-                node1 = self.__graph.getVertex(ndLabel1)
                 ndLabel2 = input('please enter the name of the to-node')
-                node2 = self.__graph.getVertex(ndLabel2)
+                self.__lookEdge(ndLabel1, ndLabel2)
                 
-                if not node1 or not node2:
-                    print('one of the nodes do not exist. Maybe try adding the nodes first')
-                else:
-                    if not self.__graph.isAdjacent(ndLabel1, ndLabel2):
-                        print('this edge do not exist')
-                    else:
-                        print('this edge exists')
-                        print('(from-Node, to-Node, value): (' + ndLabel1 + ', ' + ndLabel2 + ', ' + self.__graph.getEdgeWeight(ndLabel1, ndLabel2) + ')')
-        
             elif command == '2':
                 
                 ndLabel1 = input('please enter the name of the from-node')
-                node1 = self.__graph.getVertex(ndLabel1)
                 ndLabel2 = input('please enter the name of the to-node')
-                node2 = self.__graph.getVertex(ndLabel2)
+                print('choose among the following NCodes')
+                print(self.__ECode)
+                Ecode = input()
+                self.__addEdge(ndLabel1, ndLabel2, Ecode)
                 
-                if not node1 or not node2:
-                    print('one of the nodes do not exist. maybe add them first')
-                else:
-                    if self.__graph.isAdjacent(ndLabel1, ndLabel2):
-                        print('this edge already exist. You might want to update it')
-                    else:
-                        print('choose among the following NCodes')
-                        print(self.__ECode)
-                        Ecode = input()
-                        if not self.__ECode.hasKey(Ecode):
-                            print('this node code does not exists')
-                        else:
-                            self.__graph.addEdge(ndLabel1, ndLabel2, Ecode)
-                            print('\n edge added\n')
-                            
             elif command == '3':
                 ndLabel1 = input('please enter the name of the from-node')
-                node1 = self.__graph.getVertex(ndLabel1)
                 ndLabel2 = input('please enter the name of the to-node')
-                node2 = self.__graph.getVertex(ndLabel2)
-                
-                if not node1 or not node2:
-                    print('one of the nodes do not exist. maybe add them first')
-                    
-                else:
-                    if not self.__graph.isAdjacent(ndLabel1, ndLabel2):
-                        print('this edge does not exist so do not worry about deleting it')
-                    else:
-                        self.__graph.deleteEdge(ndLabel1, ndLabel2)
-                        print('\edge deleted\n')
+                self.__deleteEdge(ndLabel1, ndLabel2)
                         
             elif command == '4':
                 ndLabel1 = input('please enter the name of the from-node')
-                node1 = self.__graph.getVertex(ndLabel1)
                 ndLabel2 = input('please enter the name of the to-node')
-                node2 = self.__graph.getVertex(ndLabel2)
-                
-                if not node1 or not node2:
-                    print('one of the nodes do not exist. maybe add them first')
-                    
-                else:
-                    if not self.__graph.isAdjacent(ndLabel1, ndLabel2):
-                        print('this edge does not exist so try adding it first')
-                    else:
-                        print('currently Edge Code at edge ' + ndLabel1 + '  ' + ndLabel2 + 'is ' + self.__graph.getEdgeWeight(ndLabel1, ndLabel2))
-                        print('choose among the following ECodes')
-                        print(self.__ECode)
-                        Ecode = input()
-                        if not self.__ECode.hasKey(Ecode):
-                            print('this node code does not exists')
-                        else:
-                            self.__graph.updateEdge(ndLabel1, ndLabel2, Ecode)
-                            print('\nedge updated\n')
-                        
-                
-            
+                print('choose among the following ECodes')
+                print(self.__ECode)
+                Ecode = input()
+                self.__updateEdge(ndLabel1, ndLabel2, Ecode)
             
     def parameterTweaks(self):
         print('welcome to parameter tweak')
@@ -297,13 +421,7 @@ class Game():
             elif command == '3':
                 Ncode = input('please enter the Node Code you want to add')
                 value = input('please enter the value that you want to associate with this code')
-                try:
-                    self.__NCode.put(Ncode, int(value))
-                    print('\nNode Code Added\n')
-                except ValueError:
-                    print('Value of Node Code is invalid. it has to be an integer\n')
-                except KeyError:
-                    print(' Node code is invalid as it already exists\n')
+                self.__addNcode(Ncode, value)
                 
                 
             elif command == '4':
@@ -311,59 +429,31 @@ class Game():
                 print(self.__NCode)
                 Ncode = input('enter the node code that you want to update')
                 value = input('enter the value that you want to update')
-                try:
-                    self.__NCode.updateData(Ncode, int(value))
-                    print('\nNode Code updated\n')
-                except ValueError:
-                    print('Value of Node Code is invalid. it has to be an integer\n')
-                except KeyError:
-                    print(' Node not found. Add it first\n')
+                self.__updateNcode(Ncode, value)
                     
             elif command == '5':
                 Ecode = input('please enter the Edge Code you want to add')
                 value = input('please enter the value that you want to associate with this code')
-                try:
-                    self.__ECode.put(Ecode, int(value))
-                    print('\nEdge Code Added\n')
-                except ValueError:
-                    print('Value of Node Code is invalid. it has to be an integer\n')
-                except KeyError:
-                    print(' Node code is invalid as it already exists\n')
+                self.__addEcode(Ecode, value)
                     
             elif command == '6':
                 print('choose among the following Ecode Codes to update')
                 print(self.__ECode)
                 Ecode = input('enter the node code that you want to update')
                 value = input('enter the value that you want to update')
-                try:
-                    self.__ECode.updateData(Ecode, int(value))
-                    print('\nEdge Code updated\n')
-                except ValueError:
-                    print('Value of Node Code is invalid. it has to be an integer\n')
-                except KeyError:
-                    print(' Node not found. Add it first\n')
+                self.__updateEcode(Ecode, value)
                     
             elif command == '7':
                 newStart = input('\nPlease enter the node you want to make new starting point')
-                node= self.__graph.getVertex(newStart)
-                if node != None:
-                    self.__Start = node
-                else:
-                    print('\n enter a valid node \n')
+                self.__setStart(newStart)
                     
             elif command == '8':
-                newTarget = input('\nPlease enter the node you want to make new starting point')
-                node= self.__graph.getVertex(newTarget)
-                if node != None:
-                    self.__Target = node
-                else:
-                    print('\n enter a valid node \n')
+                newTarget = input('\nPlease enter the node you want to make new target point')
+                self.__setTarget(newTarget)
+                
             else:
                 print('\ncommand not identified\n')
                 
-                
-                
-        
         
     def displayGraph(self):
         #fully functional now
@@ -371,34 +461,12 @@ class Game():
         print('display graph')
         toSave = input('do you want to save the matrix as well?enter 0 for no and 1 for yes')
         if toSave == '1':
-            toSave = True
-        if toSave == True:
             file = input('please enter the name of file that you want to save into')
             f = open(file, 'w')
-        matrix = self.__graph.displayMatrix()
-        i = 1
-        while i < len(matrix):
-            j = 1
-            while j < len(matrix):
-                
-                if matrix[i][j] != 0:
-                    matrix[i][j] = self.__ECode.getData(matrix[i][j])
-                j = j +1
-            i = i + 1
-        matrix[0][0] = '/'
-        i = 0
-        while i < len(matrix):
-            j = 0
-            while j < len(matrix):
-                
-                print(matrix[i][j], end = ' ')
-                if toSave == True:
-                    f.write(str(matrix[i][j]) + ' ')
-                j = j +1
-            print()
-            if toSave == True:
-                f.write('\n')
-            i = i + 1
+        else:
+            f = None
+        self.__displayGraph(f, toSave)
+        
     def displayWorld(self):
         print('display world')
         command = input('There are three things that you can do\n1. Display information about features\n2. Save information about features\n3. Save a visual representation of the world')
@@ -461,31 +529,24 @@ class Game():
         
         number = input('How many top routes you want to display? \nplease enter an integer.\nenter -a to display all paths')
         toSave = input('do you want to save the matrix as well?enter 0 for no and 1 for yes')
-        num = 1
         if toSave == '1':
             fname = input('please enter the name of the file where you want to save')
             file = open(fname, 'w')
-        if number == '-a':
-            factor = True
         else:
-            factor = False
-            try:
-                num = int(number)
-            except ValueError:
-                print('bad output')
-                return
-        count = 0
-        while not self.__pathQueue.isEmpty() and (factor or count < num):
-            qobj = self.__pathQueue.dequeue()
-            if toSave == '1':
-                file.write(str(qobj.getValue()) + '  ' + str(qobj.getPath()) + '\n')
-            else:
-                print(qobj.getValue(), qobj.getPath())
-            count = count + 1
+            file = None
+        self.__displayRoutes(number, toSave, file)
             
         
     def saveNetwork(self):
         print('save network')
+        filename = input('\nplease enter the name of file')
+        with open(filename, "wb") as f:
+                pickle.dump(self, f)
         
     def Play(self, outfile):
-        self.__outFile = outfile
+        file = open(outfile, 'w')
+        self.generateRoutes()
+        while not self.__pathQueue.isEmpty():
+            qobj = self.__pathQueue.dequeue()
+            file.write(str(qobj.getValue()) + '  ' + str(qobj.getPath()) + '\n')
+        
