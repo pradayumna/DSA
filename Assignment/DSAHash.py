@@ -4,37 +4,55 @@
 Created on Sat Sep 11 13:42:52 2021
 
 @author: pradyumna agrawal
+CODE ORIGINALLY CREATED FOR PRAC 7 SUBMISSION FOR COURSE DATA STRUCTURE AND ALGORITHM UNIT 
+AT CURTIN UNIVERSITY
 """
 
 from DSAHashEntry import DSAHashEntry
 import numpy as np
 import math
-import pickle
 
 class DSAHash():
+    '''
+    DEFAULT CONSTRUCTOR
+    @param maxSize: size of hash (dont matter much as hash can resize
+    '''
     
     def __init__(self, maxSize):
         
-        self.__maxSize = self.__getTableSize(maxSize)
-        self.__hashArray = np.empty(self.__maxSize, dtype = DSAHashEntry)
-        self.__count = 0
+        self.__maxSize = self.__getTableSize(maxSize) #get the closest prime number
+        self.__hashArray = np.empty(self.__maxSize, dtype = DSAHashEntry) #create a hasharray
+        self.__count = 0 #set counter at 0
         for i in range(self.__maxSize):
-            self.__hashArray[i] = DSAHashEntry()
+            self.__hashArray[i] = DSAHashEntry() #create hash entries
             
     def __iter__(self):
-        count = 0
-        while count < self.__maxSize:
-            if self.__hashArray[count].getKey() is not None:
-                yield self.__hashArray[count] 
+        '''
+        ITERATOR
+        '''
+        count = 0 #start with count = 0
+        while count < self.__maxSize: #go till count is less than maxsize
+            if self.__hashArray[count].getKey() is not None: #check for empty Hash
+                if self.__hashArray[count].getState() != 2: #check for deleted hash entry
+                    yield self.__hashArray[count] 
             count += 1
     
     def __str__(self):
+        '''
+        Printing support
+        '''
         for i in self.__hashArray:
             if i.getKey() != None:
                 print(i.getKey(), i.getValue())
         return ' '
         
     def __getTableSize(self, maxSize):
+        '''
+        @param: maxSize -> number entered by user
+        @return: maxSize -> nearest prime Number
+        This function returns the nearest prime number
+        '''
+        
         if maxSize < 13:
             maxSize = 11
         if maxSize%2 == 0:
@@ -53,6 +71,12 @@ class DSAHash():
         return maxSize
     
     def __hashFunction(self, key):
+        '''
+        @param key
+        @return index
+        this function convers key to index of hasharray
+        '''
+        
         hashIndex = 0
         for i in key:
             hashIndex += ord(i)
@@ -60,9 +84,21 @@ class DSAHash():
         return hashIndex%self.__maxSize
     
     def __probeIndex(self, index, size):
+        '''
+        @param index
+        @param size
+        @return index
+        this function takes index and size and return new index after probing
+        '''
         return (index + size) % self.__maxSize
     
     def __find(self, key):
+        
+        '''
+        @Param key
+        @return index
+        This function takes a key and tells the index at which the key is present in the hash array
+        '''
         
         index = self.__hashFunction(key)
         found = False
@@ -79,18 +115,34 @@ class DSAHash():
             return -1
         
     def __stepHash(self, key):
+        '''
+        @param Key
+        @return size
+        This is the second hashing function. It returns the size for probing
+        '''
+        
         hashIndex = 0
         for i in key:
             hashIndex += ord(i)
         return 11 - hashIndex%11
     
     def __newSize(self, variety):
+        '''
+        @param: variety -> 1 for increasing size, 0 for decreasing
+        This function calculates the new size for hash array based on requirement
+        '''
+        
         while self.getLoadFactor() > 0.60 and variety == 1:
             self.__maxSize = self.__getTableSize(int(self.__maxSize * 1.5))
         while self.__maxSize > 13 and self.getLoadFactor() < 0.10:
             self.__maxSize = self.__getTableSize(int(self.__maxSize/2))
             
     def __reSize(self, variety):
+        '''
+        @param: variety -> 1 for increasing size, 0 for decreasing
+        This function resizes the hasharray
+        '''
+        
         self.__newSize(variety)
         tempArray = self.__hashArray
         self.__count = 0
@@ -103,6 +155,14 @@ class DSAHash():
 
     
     def put(self, key, data):
+        
+        '''
+        @param key
+        @param data
+        
+        This function puts a key and respective data in hash table
+        '''
+        
         if self.hasKey(key):
             raise KeyError("key already exists")
         else:
@@ -116,6 +176,14 @@ class DSAHash():
     
     
     def get(self, key):
+        
+        '''
+        @param key
+        @return DSAHashEntry
+        
+        This function takes a key and returns the hash entry object associated with that key
+        '''
+        
         index = self.__find(key)
         if index != -1:
             return self.__hashArray[index]
@@ -123,6 +191,14 @@ class DSAHash():
             raise KeyError("key not found")
             
     def updateData(self, key, data):
+        
+        '''
+        @param key
+        @param data
+        
+        This function updates the data at the key.
+        '''
+        
         index = self.__find(key)
         if index != -1:
             self.__hashArray[index].setValue(data)
@@ -131,6 +207,13 @@ class DSAHash():
         
             
     def getData(self, key):
+        
+        '''
+        @param key
+        @return data (object)
+        
+        This function takes a key and returns the associated data' '
+        '''
         index = self.__find(key)
         if index != -1:
             return self.__hashArray[index].getValue()
@@ -138,12 +221,29 @@ class DSAHash():
             raise KeyError("key not found")
                 
     def hasKey(self, key):
+        '''
+        @param key
+        @return bool 
+        This function returns true if a key is in hash table
+        '''
+        
         return self.__find(key) != -1
     
-    def getHashArray(self): #for file IO
+    def getHashArray(self):
+        '''
+        @return np.array(dtype = DSAHashEntry)
+        '''
+        
         return self.__hashArray
     
     def deleteKey(self, key):
+        
+        '''
+        @param key
+        
+        This function takes a key and deletes hash entry associated with it
+        '''
+        
         index = self.__find(key)
         if index != -1:
             self.__hashArray[index].setState(2)
@@ -156,45 +256,19 @@ class DSAHash():
     
     
     def getLoadFactor(self):
+        '''
+        @return load factor
+        This function returns load factor
+        '''
+        
         return self.__count/self.__maxSize
     
     def getHashSize(self):
+        '''
+        @return size
+        This function returns size of the hash
+        '''
+        
         return self.__maxSize
 
-
-class hashIO():
-    
-    def __init__(self):
-        self.__hashTable = None
-        
-    def readCSV(self, filename):
-        file = open(filename, 'r')
-        data = file.readlines()
-        self.__hashTable = DSAHash(len(data))
-        for i in data:
-            try:
-                self.__hashTable.put(i.split(',')[0], i.split(',')[1].strip())
-            except KeyError as e:
-                print(e, i.split(',')[0])
-        return self.__hashTable
-    
-    def writeCSV(self, hashTable, filename):
-        hashArray = hashTable.getHashArray()
-        file = open(filename, 'w')
-        for i in hashArray:
-            if i.getState() == 1:
-                file.write(str(i.getKey()) + ',' + str(i.getValue()) + '\n')
-    
-    def loadSerialisedFile(self, filename):
-        try:
-            with open(filename, "rb") as dataFile:
-                self.__hashTable = pickle.load(dataFile)
-        except:
-            print("file does not exist")
-        return self.__hashTable
-    
-    def saveSerialisedFile(self, hashTable, filename):
-        with open(filename, "wb") as f:
-                pickle.dump(hashTable, f)
-        
-                
+################### THE END (HOPEFULY). PLEASE REAMIN SEATED FOR END CREDIT SCENES ##########                

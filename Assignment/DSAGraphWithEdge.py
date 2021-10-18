@@ -4,64 +4,107 @@
 Created on Thu Sep  9 00:17:26 2021
 
 @author: pradyumna agrawal
+
+CODE ORIGINALLY CREATED FOR PRAC 6 SUBMISSION FOR COURSE DATA STRUCTURE AND ALGORITHM UNIT 
+AT CURTIN UNIVERSITY
 """
 
 from linkedKList import DSALinkedList
-import os
-from DSAQueue import queue
 from DSAHash import DSAHash
-import pickle 
 import numpy as np
 
 class DSAGraph:
+    '''
+    This class represents a Directed, weighted graph with Adjacency list implementation using DSALinkedList
+    '''
     
     def __init__(self):
+        '''
+        Default constructor. 
+        Sets a DSALinkedList to contain graph vertices. 
+        '''
         self.vertices = DSALinkedList()
         
     def addVertex(self, label, data):
-        if self.hasVertex(label):
+        '''
+        @param1: label -> A label to identify vertices. 
+        @param2: value -> A value to save in vertices. They can be anything (example - weight of vertex)
+        Add a vertex to the graph
+        '''
+        if self.hasVertex(label): #check if vertex already exists. 
             print("vertex already exists")
-        else:
+        else: #if not, then create a new DSAGraphVertex object and add it to the vertexlist of the graph. 
             newVertex = DSAGraphVertex(label, data)
             self.vertices.insertLast(newVertex)
             
     def hasVertex(self, label):
-        result = False
-        for i in self.vertices:
+        '''
+        @param: label -> Name of the vertex that needs to be searched
+        @return: result (Boolean) -> true if vertex is in the graph, false otherwise.
+        This function tells whether a vertex label is in graph or not
+        '''
+        result = False #assume that vertex is not there
+        for i in self.vertices: #self made iterator
             if i.getLabel() == label:
-                result = True
+                result = True #vertex found.
         return result
     
     def getVertex(self, label):
-        for i in self.vertices:
-            if i.getLabel() == label:
-                return i
-        else:
-            return None
+        '''
+        @param: label -> Label of the vertex that needs to be returned
+        @return: DSAGraphVertex -> Object that has the same label name. 
+        This function takes a vertex label and returns vertex associated with that label. 
+        '''
+        for i in self.vertices: #interate over vertex list
+            if i.getLabel() == label: #if a match is found
+                return i #return that vertex
+        
+        return None #return nothing if not found
         
     def deleteVertex(self, label):
-        if self.hasVertex(label):
-            for i in self.vertices:
+        '''
+        @param: label -> Label of the vertex that needs to be deleted
+        This function takes a vertex label and deletes vertex associated with that label. 
+        '''
+        
+        if self.hasVertex(label): #check if vertex label is in the graph. 
+            for i in self.vertices: # we have to delete all edges as well. so iterate over adjacency list (DSALinkedList) of the vertex. 
                 adjList = i.getAdjacentList()
-                for j in adjList:
-                    if j.vertex.getLabel() == label:
-                        adjList.deleteNode(j)
-            self.vertices.deleteNode(self.getVertex(label))
+                for j in adjList: #iterate over all the vertices in the adjaceny list. 
+                    if j.vertex.getLabel() == label: #label mathced. 
+                        adjList.deleteNode(j) #delete that node
+            self.vertices.deleteNode(self.getVertex(label)) #delete vertex. 
             
         
     def getVertexCount(self):
-        count = 0
-        for i in self.vertices:
-            count += 1
-        return count
+        '''
+        return: Count (int) -> number of vertices. 
+        this function returns number of vertices in the graph
+        '''
+        count = 0 #start with count zero
+        for i in self.vertices: #iterate over all vertices
+            count += 1 #increase count
+        return count 
     
     def getAdjacent(self, label):
-        vertex = self.getVertex(label)
-        if (vertex):
-            return vertex.getAdjacentList()
-        return None
+        '''
+        @param: label of the vertex
+        @returnL Adjacency List (DSALinkedList)
+        if a vertex is in the graph, return its adjacency list 
+        '''
+        vertex = self.getVertex(label) #get the vertex from the label
+        if (vertex): #if vertex exists
+            return vertex.getAdjacentList() #return its adjacentList
+        return None #else return nothing. 
         
     def addEdge(self, label1, label2, value = None):
+        '''
+        @param1: label1 -> from label
+        @param2: label2 -> to label
+        @param3: value -> edge weight (optional)  
+        
+        Basically, add label 2 in the adjacency of label 1
+        '''
         
         if not self.hasVertex(label1):
             raise ValueError('No such vertex exists')  
@@ -76,6 +119,13 @@ class DSAGraph:
 
     
     def isAdjacent(self, label1, label2):
+        '''
+        @param1: label1 -> from label
+        @param2: label2 -> to label
+        @return: Boolean -> true if edge exists from label 1 to label 2, false other wise
+        
+        This function checks if two vertices are adjacent
+        '''
         v1 = self.getVertex(label1)
         if(v1):
             adjacentList = v1.getAdjacentList()
@@ -86,6 +136,12 @@ class DSAGraph:
         return False
     
     def deleteEdge(self, label1, label2):
+        '''
+        @param1: label1 -> from label
+        @param2: label2 -> to label
+        
+        This function deletes edge from label1 to label2
+        '''
         v1 = self.getVertex(label1)
         if(v1):
             adjacentList = v1.getAdjacentList()
@@ -95,6 +151,14 @@ class DSAGraph:
                     adjacentList.deleteNode(j)
                     
     def updateEdge(self, label1, label2, Ecode):
+        '''
+        @param1: label1 -> from label
+        @param2: label2 -> to label
+        @param3: Ecode -> new weight
+        
+        This function updates the weight of an edge (Ecode in this case)
+        '''
+        
         v1 = self.getVertex(label1)
         if(v1):
             adjacentList = v1.getAdjacentList()
@@ -105,6 +169,14 @@ class DSAGraph:
                     
     
     def getEdgeWeight(self, label1, label2):
+        '''
+        @param1: label1 -> from label
+        @param2: label2 -> to label
+        @return: Ecode -> the weight of an edge
+        
+        This function returns weight of edge label1 -> label2
+        '''
+        
         v1 = self.getVertex(label1)
         if(v1):
             adjacentList = v1.getAdjacentList()
@@ -114,24 +186,25 @@ class DSAGraph:
                     return j.getWeight()
     
     def getEdgeCount(self):
+        
+        '''
+        @return: Int -> number of edges in the graph
+        
+        This function returns number of edges in the graph
+        '''
         count = 0
         for i in self.vertices:
             adjacentList = i.getAdjacentList()
             for j in adjacentList:
                 count = count + 1
-        return int(count/2)
+        return int(count)
             
-    def displayList(self):
-        for i in self.vertices:
-            label = i.getLabel()
-            adjacentList = i.getAdjacentList()
-            print(str(label) + ' : ', end = " ")
-            for j in adjacentList:
-                label = j.vertex.getLabel()
-                print(str(label), end = " ")
-            print()
             
     def displayMatrix(self):
+        '''
+        @return: matrix (np.array) -> adjacency matrix
+        This function returns graph in the format of Adjacency Matrix
+        '''
         count = 0
         count = self.getVertexCount()
         vertexHash = DSAHash(count)
@@ -144,19 +217,23 @@ class DSAGraph:
                 matrix[vertexHash.getData(i.getLabel())][vertexHash.getData(j.vertex.getLabel())] = j.getWeight()
         return matrix
             
-    def degree(self, label):
-        v = self.getVertex(label)
-        if(v):
-            return v.getDegree()
-        return 0
     
     def _findPaths(self, start, target, visited, T, paths):
+        '''
+        @param1: start -> the node from which paths should be found 
+        @param2: target -> the node to which paths should be found
+        @param3: visited -> DSAHash that keeps track of all the nodes visited
+        @param4: T -> DSALinkedList to keep track of the path getting travered currently
+        @param5: paths -> DSALinkedList to save all the completed paths found till now.
+        
+        Code Reference:
+            @Author: Shivam Gupta
+            @Last Updated: 02 Jul, 2021
+            @Link: https://www.geeksforgeeks.org/find-paths-given-source-destination/
+        
+        '''
         visited.put(start.getLabel(), start)
         T.insertLast(start.getLabel())
-        # try:
-        #     print(paths.peek().getPath())
-        # except IndexError:
-        #     print('still empty')
         if start == target:
             temp = DSALinkedList()
             for i in T:
@@ -172,121 +249,80 @@ class DSAGraph:
         
                     
     def findPaths(self, start, target):
-        paths = DSALinkedList()
-        visited = DSAHash(10)
-        T = DSALinkedList()
-        self._findPaths(start, target, visited, T, paths)
+        '''
+        @param1: start -> the node from which paths should be found 
+        @param2: target -> the node to which paths should be found
+        @return: paths -> A DSALinkedList with all possible paths. 
+        
+        Code Reference:
+            @Author: Shivam Gupta
+            @Last Updated: 02 Jul, 2021
+            @Link: https://www.geeksforgeeks.org/find-paths-given-source-destination/  
+        '''
+        paths = DSALinkedList() #it will save all completed paths
+        visited = DSAHash(10) #it will keep track of all the nodes visited till now
+        T = DSALinkedList() #it will jeep track of the path in constructions
+        self._findPaths(start, target, visited, T, paths) #call recursive function. 
         return paths
-    
-    def _BFS(self, q, visited, T):
-        
-        if q.isEmpty():
-            return T
-        else:
-            v = q.dequeue()
-            for w in v.getAdjacentList():
-                if w.vertex not in visited:
-                    T.append([v.getLabel(), w.vertex.getLabel(), w.getWeight()])
-                    visited.add(w.vertex)
-                    q.enqueue(w.vertex)
-                    
-            T = self._BFS(q, visited, T)
-                
-        
-    def BFS(self):
-        visited = set()
-        T = []
-        visited.add(self.vertices.head.value)
-        q = queue()
-        q.enqueue(self.vertices.head.value)
-        self._BFS(q, visited, T)
-        return T
+
             
 class DSAGraphVertex():
+
+    #This class represents vertices of a graph. 
+    
     
     def __init__(self, label, data):
-        self.label = label
-        self.data = data
-        self.vertexList = DSALinkedList()
+        '''
+        DEFAULT CONSTRUCTOR
+        @param1: label -> label of the vertex
+        @param2: data -> can be anything (for example weight, color)
+        '''
+        self.label = label #set label
+        self.data = data #set data
+        self.vertexList = DSALinkedList() #set vertex list 
         
-    def __str__(self):
+    def __str__(self): #prints data
         return self.data
 
-        
+    #setters and getters    
     def getLabel(self):
         return self.label
     
-    def getData(self):
+    def getData(self): #returns data
         return self.data
     
-    def updateData(self, data):
+    def updateData(self, data): #sets data
         self.data = data
     
-    def getAdjacentList(self):
+    def getAdjacentList(self): #returns adjacency list (DSALinkedList)
         return self.vertexList
     
-    def printAdjacentList(self):
-        for i in self.getAdjacentList():
-            print([i.vertex.getLabel(), i.value], end = " ")
     
     def addAdjacent(self, vertex, value):
+        '''
+        @param1: vetex -> DSAGraph vertex (to vertex)
+        @param2: value -> Weight of the edge
+        This function adds an edge
+        '''
+        
         edge = DSAGraphEdge(vertex, value)
         self.vertexList.insertLast(edge)
     
-    def getDegree(self):
-        count = 0
-        for i in self.vertexList:
-            count += 1
-        return count
     
 class DSAGraphEdge():
     
-    def __init__(self, vertex, value):
-        self.vertex = vertex
-        self.value = value
+    #this class represents a graph edge. It has name of a vertex and the weight
+    
+    def __init__(self, vertex, value): #default constructor
+        self.vertex = vertex #add vertex
+        self.value = value #add weight
         
     def getWeight(self):
-        return self.value
+        return self.value #return weight
     
     def setWeight(self, weight):
-        self.value = weight
+        self.value = weight #set weight
         
-        
-class GraphIO():
-    def __init__(self):
-        self.graph = DSAGraph()
-    def makeGraph(self, filename):
-        if os.path.isfile(filename):
-            file = open(filename)
-            a = file.readlines()
-            print(a)
-            lst = [[i.split(' ')[0], i.split(' ')[1].strip(), i.split(' ')[2].strip()] for i in a]
-            for i in lst:
-                self.graph.addEdge(i[0], i[1], i[2])
-
-        return self.graph
-    
-    def saveGraph(self, graph, filename, variety):
-        file = open(filename, 'w')
-        if variety == "BFS":
-            T = graph.BFS()
-        else:
-            T = graph.DFS()
-        for i in T:
-            string = str(i[0]) + ' ' + str(i[1]) + ' ' + str(i[2]) + '\n'
-            file.write(string)
-            
-    def loadSerialisedGraph(self, filename):
-        try:
-            with open(filename, "rb") as dataFile:
-                self.graph = pickle.load(dataFile)
-        except:
-            print("file does not exist")
-        return self.graph
-    
-    def saveSerialisedGraph(self, graph, filename):
-        with open(filename, "wb") as f:
-                pickle.dump(graph, f)
 
 
 a = DSAGraph()
@@ -304,9 +340,11 @@ a.addEdge('E', 'G', 35)
 a.addEdge('D', 'E', 60)
 a.addEdge('F', 'E', 45)
 a.addEdge('H', 'J', 50)
-a.displayList()
+#a.displayList()
 
 b = a.findPaths(a.getVertex('A'), a.getVertex('E'))
 
 for i in b:
     print(type(i))
+    
+################### THE END (HOPEFULY). PLEASE REAMIN SEATED FOR END CREDIT SCENES ##########
