@@ -324,27 +324,5 @@ class DSAGraphEdge():
         self.value = weight #set weight
         
 
-
-a = DSAGraph()
-for i in ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J']:
-    a.addVertex(i, i)
-    
-
-a.addEdge('A', 'B', 35)
-a.addEdge('A', 'F', 30)
-a.addEdge('A', 'D', 40)
-a.addEdge('B', 'E', 35)
-a.addEdge('C', 'F', 30)
-a.addEdge('D', 'H', 45)
-a.addEdge('E', 'G', 35)
-a.addEdge('D', 'E', 60)
-a.addEdge('F', 'E', 45)
-a.addEdge('H', 'J', 50)
-#a.displayList()
-
-b = a.findPaths(a.getVertex('A'), a.getVertex('E'))
-
-for i in b:
-    print(type(i))
     
 ################### THE END (HOPEFULY). PLEASE REAMIN SEATED FOR END CREDIT SCENES ##########

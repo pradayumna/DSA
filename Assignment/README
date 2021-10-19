@@ -1,0 +1,51 @@
+##Synopsis 
+
+Overview -> Assignment submission for partial fulfilment of DSA unit at Curtin University
+Author -> Pradyumna Agrawal
+ID - 20046165
+email - pradyumna.agrawal@student.curtin.edu.au
+Version - 5th (18th Oct 2021)
+
+
+##Content
+
+gameofcatz.py - The main python script that should be run to demonstrate the project
+Game.py - python file with Game class
+testHarness.py - test harness with Unit Test Cases for all the classes used in this assignment
+DSAGraphWithEdge.py - Python file that contains following three classes -> DSAGraph, DSAGraphVertex, and DSAGraphEdge
+DSAHash.py - Python file to implement DSAHash class
+DSAHashEntry.py - python file to implement building blocks of hash class
+DSAHeap.py - python file to implement DSAHeap class
+DSAHeapEntry.py - Python file to implement DSAHealEntry class. these entries are used to make DSAHeap
+linkedKList.py - python file to implement doubly-linkedlist using np array
+showcase.py - python file to run three scenarios.
+graph.png - graph created as a result of scenario 3:
+
+cathwithoutstart.txt - input file with no mention of Start Node (used for unit testing)
+emptyFile.txt - an empty file (used for unit testing)
+gameofcatz.txt - a functional input file
+gameofcatz2.txt - a functional input file
+gameofcatz3.txt - a functional input file
+pacman1.txt - a functional input file
+amazing4.txt - a functional input file
+
+instructions.txt - information about instructions to run this code
+interactiveCommands.txt - information about available list of choices
+
+##dependencies
+
+Numpy
+Matplotlib
+Networkx
+
+##how to run 
+
+There are two modes through which you can run this code 
+
+Mode 1 - Interective testing environment
+
+usage python3 gameofcatz.py -i
+
+Mode 2 - Simulation mode 
+
+usage: python3 gameofcatz -s infile savefile

@@ -8,14 +8,15 @@ Created on Sun Oct 10 22:13:47 2021
 
 This file contains code for Game classs
 """
+from linkedKList import DSALinkedList 
 from DSAHash import DSAHash #Hash is needed for maintaining NCodes and ECodes.
 from DSAGraphWithEdge import DSAGraph #DSAGraphWithEdge lets maintaining weighted graphs. 
-from DSAQueue import priorityQueue #priority queue helps in keeping all the paths sorted
 import networkx as nx #This one is used for visualisation part. Its an add on feature. 
 import matplotlib.pyplot as plt #This is also needed for visualisation part
 import random #this one is also needed for visualisation part
 from matplotlib.lines import Line2D #this one is also needed for visualisation part
 import pickle #this is used to save the network. 
+from DSAHeap import DSAHeap
 
 class Game():
     
@@ -29,8 +30,7 @@ class Game():
         self.__NCode = DSAHash(10) #The hash is self-resizing. so do not worry about it having just a size of 10
         self.__ECode = DSAHash(10)
         self.__graph = self.__makeGraph() #this function creates the graph. 
-        self.__pathQueue = priorityQueue() #Priority queue saves all the possible paths. 
-        
+        self.__pathHeap = None        
     def __makeGraph(self):
         '''
         this function creates graph. 
@@ -164,7 +164,7 @@ class Game():
         
            
     
-    def __lookForNode(self, ndLabel):
+    def _lookForNode(self, ndLabel):
         
         '''
         @param: ndLabel -> label of the node. 
@@ -172,12 +172,12 @@ class Game():
         '''
         node = self.__graph.getVertex(ndLabel) #get node from the graph
         if not node: #if node not there then print this. 
-            print('this node does not exist')
+            print(ndLabel, ' node does not exist')
         else: #if node there, then print node label and ncode. 
             print('this node exists')
             print('(Node, value): (' + ndLabel + ', ' + str(node.getData()) + ')')
             
-    def __addNode(self, ndLabel, Ncode):
+    def _addNode(self, ndLabel, Ncode):
         '''
         @param1 : ndLabel -> label of the new node
         @param2: Ncode -> Ncode of the new node
@@ -193,7 +193,7 @@ class Game():
                 self.__graph.addVertex(ndLabel, Ncode)
                 print('\nNode added\n')
             
-    def __deleteNode(self, ndLabel):
+    def _deleteNode(self, ndLabel):
         '''
         @param: ndLabel -> label of the node that has to be deleted. 
         
@@ -209,7 +209,7 @@ class Game():
                 self.__graph.deleteVertex(ndLabel)
                 print('\nNode deleted\n')
             
-    def __updateNode(self, ndLabel, Ncode):
+    def _updateNode(self, ndLabel, Ncode):
         '''
         @param1: ndLabel: Label of the node that you want to update
         @param2: Ncode: new ncode
@@ -225,7 +225,7 @@ class Game():
                 self.__graph.getVertex(ndLabel).updateData(Ncode)
                 print('\nNode Updated\n')
             
-    def __lookEdge(self, ndLabel1, ndLabel2):
+    def _lookEdge(self, ndLabel1, ndLabel2):
         '''
         @param1: ndLabel1: label of from node.
         @param2: ndLabel2: label of to node. 
@@ -243,7 +243,7 @@ class Game():
                 print('this edge exists') 
                 print('(from-Node, to-Node, value): (' + ndLabel1 + ', ' + ndLabel2 + ', ' + self.__graph.getEdgeWeight(ndLabel1, ndLabel2) + ')')
         
-    def __addEdge(self, ndLabel1, ndLabel2, Ecode):
+    def _addEdge(self, ndLabel1, ndLabel2, Ecode):
          '''
             @param1: ndLabel1: label of from node.
             @param2: ndLabel2: label of to node. 
@@ -266,7 +266,7 @@ class Game():
                      self.__graph.addEdge(ndLabel1, ndLabel2, Ecode)
                      print('\n edge added\n')
                      
-    def __deleteEdge(self, ndLabel1, ndLabel2):
+    def _deleteEdge(self, ndLabel1, ndLabel2):
         
         '''
         @param1: ndLabel1: label of from node.
@@ -286,7 +286,7 @@ class Game():
                 self.__graph.deleteEdge(ndLabel1, ndLabel2)
                 print('\edge deleted\n')
                 
-    def __updateEdge(self, ndLabel1, ndLabel2, Ecode):
+    def _updateEdge(self, ndLabel1, ndLabel2, Ecode):
         
         '''
             @param1: ndLabel1: label of from node.
@@ -310,7 +310,7 @@ class Game():
                     self.__graph.updateEdge(ndLabel1, ndLabel2, Ecode)
                     print('\nedge updated\n')
                     
-    def __addNcode(self, Ncode, value):
+    def _addNcode(self, Ncode, value):
         '''
         @param1: Ncode -> new ncode that you want to add
         @param2: value -> value that you want to associate with the new ncode. 
@@ -326,7 +326,7 @@ class Game():
         except KeyError: #the ncode already existed in the hash. 
             print(' Node code is invalid as it already exists\n')
             
-    def __updateNcode(self, Ncode, value):
+    def _updateNcode(self, Ncode, value):
         '''
         @param1: Ncode -> ncode that you want to update
         @param2: value -> value that you want to associate with the ncode. 
@@ -341,7 +341,7 @@ class Game():
         except KeyError: #it is possible that the ncode is not present in the code. 
                 print(' Ncode not found. Add it first\n')
                 
-    def __addEcode(self, Ecode, value):
+    def _addEcode(self, Ecode, value):
         
         '''
         @param1: Ecode -> new Ecode that you want to ad..
@@ -353,11 +353,11 @@ class Game():
             self.__ECode.put(Ecode, int(value)) #try adding. handle exceptions. 
             print('\nEdge Code Added\n')
         except ValueError: #possible that the value user is associating with the code is not integer.
-            print('Value of Node Code is invalid. it has to be an integer\n')
+            print('Value of Edge Code is invalid. it has to be an integer\n')
         except KeyError: #it is possbile that the node was already in the hash. 
-            print(' Node code is invalid as it already exists\n')
+            print('Edge code is invalid as it already exists\n')
         
-    def __updateEcode(self, Ecode, value):
+    def _updateEcode(self, Ecode, value):
         
         '''
         @param1: Ecode -> Ecode that you want to update
@@ -369,11 +369,11 @@ class Game():
             self.__ECode.updateData(Ecode, int(value)) #try updating, handle exceptions. 
             print('\nEdge Code updated\n')
         except ValueError: #same old, same old. 
-            print('Value of Node Code is invalid. it has to be an integer\n')
+            print('Value of Edge Code is invalid. it has to be an integer\n')
         except KeyError: #same old, same old. 
-            print(' Node not found. Add it first\n')
+            print('Ecode not found. Add it first\n')
             
-    def __setStart(self, newStart):
+    def _setStart(self, newStart):
         
         '''
         @param: newStart: label of the node that user wants to set as Start
@@ -385,9 +385,9 @@ class Game():
         if node != None: #check if node exists. 
             self.__Start = node #if yes, then change the start. 
         else:
-            print('\n enter a valid node \n') #if no, then print so. 
+            print('\nenter a valid node \n') #if no, then print so. 
             
-    def __setTarget(self, newTarget):
+    def _setTarget(self, newTarget):
         
         '''
         @param: newTarget: label of the node that user wants to set as Target
@@ -399,9 +399,9 @@ class Game():
         if node != None: #check if node is real. 
             self.__Target = node #set the new target
         else:
-            print('\n enter a valid node \n') #else print so. 
+            print('\nenter a valid node \n') #else print so. 
             
-    def __displayGraph(self, f, toSave):
+    def _displayGraph(self, f, toSave):
         '''
         param1: f: file obj 
         paran2: toSave: indicator of if user wants to save in the file obj (f)
@@ -435,7 +435,7 @@ class Game():
                 f.write('\n')
             i = i + 1
             
-    def __displayRoutes(self, number, toSave, file):
+    def _displayRoutes(self, number, toSave, file):
         '''
         @param1: number -> number of routes that user wants to display. keep it '-a' for diplaying all routes. 
         @param2: toSave -> whether user wants to save the routes
@@ -457,15 +457,16 @@ class Game():
                 return
         count = 0 #keep track of how many paths have been displayed till now
         
-        while not self.__pathQueue.isEmpty() and (factor or count < num): #keep displaying/saving till this condition stands. 
-            qobj = self.__pathQueue.dequeue() #dequeue the path with highest priority from priority queue. 
+        while count < self.__pathList.getCount() and (factor or count < num): #keep displaying/saving till this condition stands. 
+            qobj = self.__pathHeap.getHeapArray()[count] #get the heap element at index count 
             if toSave == '1': #if user wants to write it to a file, then do so. 
-                file.write(str(qobj.getValue()) + '  ' + str(qobj.getPath()) + '\n')
+                file.write(str(qobj.getPriority()) + '  ' + str(qobj.getValue()) + '\n')
             else:
-                print(qobj.getValue(), qobj.getPath())
+                print(qobj.getPriority(), qobj.getValue())
             count = count + 1
+
             
-    def __calculateCost(self, path):
+    def _calculateCost(self, path):
         cost = 0
         for i in path:
             cost = cost + self.__NCode.getData(self.__graph.getVertex(i).getData())
@@ -476,6 +477,25 @@ class Game():
             i = i + 1
             node = node.next
         return cost
+    
+    def _printNodeDistribution(self):
+        tempHash = DSAHash(10)
+        for i in self.__NCode:
+            tempHash.put(i.getKey(), 0)
+        for i in self.__graph.vertices:
+            tempHash.updateData(i.getData(), tempHash.getData(i.getData()) + 1)
+        return tempHash
+    
+    def _printEdgeDistribution(self):
+        tempHash = DSAHash(10)
+        for i in self.__ECode:
+            tempHash.put(i.getKey(), 0)
+        
+        for i in self.__graph.vertices: #self made iterator
+            for j in i.getAdjacentList(): #self made iterator
+                tempHash.updateData(j.getWeight(), tempHash.getData(j.getWeight()) + 1)
+        return tempHash
+    
 ################################################################################################   
 ##  All the functions above are private to Game class. The functions below are the public one ##
 ##  which will be accessed by gameofcatz.py to provide required functionalities.              ##  
@@ -499,7 +519,7 @@ class Game():
             #user wants to look at a node
             elif command == '1':
                 ndLabel = input('please enter the name of the node') #ask user for the label of node. 
-                self.__lookForNode(ndLabel) #call the function to look for the node. 
+                self._lookForNode(ndLabel) #call the function to look for the node. 
                 
             #user wants to add a new node.
             elif command == '2':
@@ -509,13 +529,13 @@ class Game():
                 print('choose among the following NCodes')
                 print(self.__NCode)
                 Ncode = input()
-                self.__addNode(ndLabel, Ncode) #call function to add a new node. 
+                self._addNode(ndLabel, Ncode) #call function to add a new node. 
 
             #user wants to delete a node
             elif command == '3':
                 #ask user for the name of the node that they want to delete. 
                 ndLabel = input('please enter the name of the node that you want to delete')
-                self.__deleteNode(ndLabel) #call the node killing function. 
+                self._deleteNode(ndLabel) #call the node killing function. 
 
             #user wants to update a node
             elif command == '4':
@@ -525,7 +545,7 @@ class Game():
                 print('choose among the following NCodes')
                 print(self.__NCode)
                 Ncode = input()
-                self.__updateNode(ndLabel, Ncode) #call the function to update node. 
+                self._updateNode(ndLabel, Ncode) #call the function to update node. 
                 
             else: #in case user is a 'tester'
                 print('sorry command not identified')
@@ -550,7 +570,7 @@ class Game():
             elif command == '1': #user wants too look at an edge
                 ndLabel1 = input('please enter the name of the from-node') #ask for from label
                 ndLabel2 = input('please enter the name of the to-node') #ask for two label
-                self.__lookEdge(ndLabel1, ndLabel2) #call function to look for the edge
+                self._lookEdge(ndLabel1, ndLabel2) #call function to look for the edge
                 
             elif command == '2': #user wants to add an new edge
                 
@@ -559,12 +579,12 @@ class Game():
                 print('choose among the following NCodes') #let them know about Ecodes
                 print(self.__ECode)
                 Ecode = input() #ask for Ecode
-                self.__addEdge(ndLabel1, ndLabel2, Ecode) #call function to add a new edge
+                self._addEdge(ndLabel1, ndLabel2, Ecode) #call function to add a new edge
                 
             elif command == '3': #user wants to delete an edge
                 ndLabel1 = input('please enter the name of the from-node') #ask for from label
                 ndLabel2 = input('please enter the name of the to-node') #ask for to label
-                self.__deleteEdge(ndLabel1, ndLabel2) #call function to delete edge
+                self._deleteEdge(ndLabel1, ndLabel2) #call function to delete edge
                         
             elif command == '4': #user wants to update an edge
                 ndLabel1 = input('please enter the name of the from-node') #ask for from label
@@ -572,7 +592,7 @@ class Game():
                 print('choose among the following ECodes') #let them know about existing codes
                 print(self.__ECode)
                 Ecode = input() #ask for an Ecode
-                self.__updateEdge(ndLabel1, ndLabel2, Ecode) #call function to update an edge. 
+                self._updateEdge(ndLabel1, ndLabel2, Ecode) #call function to update an edge. 
             
     def parameterTweaks(self):
         
@@ -602,7 +622,7 @@ class Game():
             elif command == '3': #user wants to add an Ncode
                 Ncode = input('please enter the Node Code you want to add') #ask for new Ncode
                 value = input('please enter the value that you want to associate with this code') #ask for new value
-                self.__addNcode(Ncode, value) #call function to update Ncode
+                self._addNcode(Ncode, value) #call function to update Ncode
                 
                 
             elif command == '4': #user wants to update an Ncode
@@ -610,27 +630,27 @@ class Game():
                 print(self.__NCode) #let user know about existing Ncodes
                 Ncode = input('enter the node code that you want to update') #ask user to enter one of the existing Ncodes
                 value = input('enter the value that you want to update') #ask user to enter a new value
-                self.__updateNcode(Ncode, value) #call function to update the Ncode. 
+                self._updateNcode(Ncode, value) #call function to update the Ncode. 
                     
             elif command == '5': #user wants to add an Ecode. 
                 Ecode = input('please enter the Edge Code you want to add') #ask name for the new Ecode
                 value = input('please enter the value that you want to associate with this code') #ask new value
-                self.__addEcode(Ecode, value) #call function to add the new Ecode 
+                self._addEcode(Ecode, value) #call function to add the new Ecode 
                     
             elif command == '6': #user wants to update an Ecode.  
                 print('choose among the following Ecode Codes to update')
                 print(self.__ECode) #print available Ecodes. 
                 Ecode = input('enter the node code that you want to update') #ask user to enter an existing Ecode
                 value = input('enter the value that you want to update') #ask user to enter a new value
-                self.__updateEcode(Ecode, value) #call function to update Ecode. 
+                self._updateEcode(Ecode, value) #call function to update Ecode. 
                     
             elif command == '7': #user wants to update start position
                 newStart = input('\nPlease enter the node you want to make new starting point') #ask user for the new start. 
-                self.__setStart(newStart) #call function to update Start node. 
+                self._setStart(newStart) #call function to update Start node. 
                     
             elif command == '8': #user wants to update target position. 
                 newTarget = input('\nPlease enter the node you want to make new target point')
-                self.__setTarget(newTarget) #call function to update Target node. 
+                self._setTarget(newTarget) #call function to update Target node. 
                 
             else: #in case a tester tries to break my sweet code. 
                 print('\ncommand not identified\n')
@@ -654,7 +674,7 @@ class Game():
         else:
             #if not, keep the file obj object empty. I am still struggling with creating functions with optional arguments so, I am using a little cheat here. No violation of rules though. 
             f = None
-        self.__displayGraph(f, toSave) #call function to display/save adjacency matrix. 
+        self._displayGraph(f, toSave) #call function to display/save adjacency matrix. 
         
     def displayWorld(self):
         
@@ -686,6 +706,15 @@ class Game():
             print('\n' + '-'*20 + '\n')
             print('The world has following ECodes:\n')
             print(self.__ECode) #Display all E Codes. 
+            print('\n' + '-'*20 + '\n')
+            print('\nThe number of nodes of each type are as follow\n')
+            tempHash = self._printNodeDistribution()
+            print(tempHash)
+            print('\n' + '-'*20 + '\n')
+            print('\nThe number of edges of each type are as follow\n')
+            tempHash = self._printEdgeDistribution()
+            print(tempHash)
+            print('\n' + '-'*20 + '\n')
         
         if command == '2': #user want to save the info. Pretty much similar to previous thing. 
             filename = input('please enter the name of file in which you want to save information')
@@ -704,11 +733,22 @@ class Game():
             file.write('\n' + '-'*20 + '\n')
             file.write('The world has following NCodes:\n')
             for i in self.__NCode: #self made iterator
-                    file.write(i.getKey() + ' ' + str(i.getValue()) + '\n')
+                file.write(i.getKey() + ' ' + str(i.getValue()) + '\n')
             file.write('\n' + '-'*20 + '\n')
             file.write('The world has following ECodes:\n')
             for i in self.__ECode: #self made iterator
-                    file.write(i.getKey() + ' ' + str(i.getValue()) + '\n')
+                file.write(i.getKey() + ' ' + str(i.getValue()) + '\n')
+            file.write('\n' + '-'*20 + '\n')
+            file.write('\nThe number of nodes of each type are as follow\n')
+            tempHash = self.__printNodeDistribution()
+            for i in tempHash:
+                file.write(i.getKey() + ' ' + str(i.getValue()) + '\n')
+            file.write('\n' + '-'*20 + '\n')
+            file.write('\nThe number of edges of each type are as follow\n')
+            tempHash = self.__printEdgeDistribution()
+            for i in tempHash:
+                file.write(i.getKey() + ' ' + str(i.getValue()) + '\n')
+            file.write('\n' + '-'*20 + '\n')
                     
         if command == '3': #user wants to visualise
             self.__visualise()
@@ -717,20 +757,24 @@ class Game():
     def generateRoutes(self): #user wants to print all the routes. 
         '''
         This function generates all possible routes and save each route as a DSALinkedList. 
-        All Lists are saved in a priority queue
+        All Lists are saved in a heap
         '''
         print('generate Route')
         self.__pathList = self.__graph.findPaths(self.__Start, self.__Target) #create routes. 
+        numberOfPaths = self.__pathList.getCount()
+        self.__pathHeap = DSAHeap(numberOfPaths)
         for i in self.__pathList: #self made iterator
-            cost = self.__calculateCost(i) #calculate cost.
-            self.__pathQueue.enqueue(cost, i) #add path to queue. 
+            cost = self._calculateCost(i) #calculate cost.
+            self.__pathHeap.add(cost, i)
+        self.__pathHeap = self.__pathHeap.heapSort()
+        print(numberOfPaths)
         
     def displayRoutes(self):
         '''
         This function displays/save all available routes
         '''
         print('display routes')
-        
+        print('currently there are', int(self.__pathList.getCount()), 'routes')
         #ask user for the number of routes that they want to save
         number = input('How many top routes you want to display? \nplease enter an integer.\nenter -a to display all paths')
         #ask if they want to save routes in a file. 
@@ -740,9 +784,21 @@ class Game():
             file = open(fname, 'w')
         else:
             file = None 
-        self.__displayRoutes(number, toSave, file) #call function to diplay routes.
+        self._displayRoutes(number, toSave, file) #call function to diplay routes.
             
         
+    def returnRoutes(self, num):
+        count = 0
+        
+        routeList = DSALinkedList()
+        while count < self.__pathList.getCount() and  count < num: #keep displaying/saving till this condition stands. 
+            qobj = self.__pathHeap.getHeapArray()[count]
+            routeList.insertLast(qobj.getPriority())
+            count += 1
+        return routeList
+            
+        
+    
     def saveNetwork(self):
         '''
         This function saves Game class as a serialised file using pickle
@@ -759,8 +815,10 @@ class Game():
         '''
         file = open(outfile, 'w')
         self.generateRoutes()
-        while not self.__pathQueue.isEmpty():
-            qobj = self.__pathQueue.dequeue()
-            file.write(str(qobj.getValue()) + '  ' + str(qobj.getPath()) + '\n')
+        i = 0
+        while i < self.__pathList.getCount():
+            obj = self.__pathHeap.getHeapArray()[i]
+            file.write(str(obj.getPriority()) + '  ' + str(obj.getValue()) + '\n')
+            i = i + 1
             
 ################### THE END (HOPEFULY). PLEASE REAMIN SEATED FOR END CREDIT SCENES ##########  
