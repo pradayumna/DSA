@@ -7,6 +7,6 @@ Select one of the following commands:
 5. Display graph
 6. Display world
 7. Generate routes
-8. Display routes
+8. Display/Save routes
 9. Save network
 10. Exit

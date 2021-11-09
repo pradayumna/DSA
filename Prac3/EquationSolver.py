@@ -38,7 +38,7 @@ class equationSolver():
                 opStack.push(i)
             else:
                 postFix.enqueue(float(i))
-                
+            print(postFix)    
         while (not opStack.isEmpty()):
             postFix.enqueue(opStack.pop())
         
@@ -75,3 +75,5 @@ class equationSolver():
         
     
 
+A = equationSolver('( 10 + 5 ) / 3 + ( 4 + 5 ) * 7')
+A._parseInfixToPostfix()

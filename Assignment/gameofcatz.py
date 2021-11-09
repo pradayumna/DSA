@@ -3,7 +3,7 @@
 """
 Created on Sat Oct 09 21:12:27 2021
 
-@author: Pradyumna agrawal 
+@author: Pradyumna Agrawal 
 
 
 Welcome to the show readers. Its a huge chunk of code. But bear with my comment.
@@ -33,7 +33,8 @@ def __interactiveTestingEnvironment():
     
     print('Welcome to interactive testing mode' + '\n'*4)
     commands = open('interactiveCommands.txt', 'r') #it just helps in keeping the code more readable
-    print(commands.read())
+    menu = commands.read()
+    print(menu)
     gameSet = False #so this tracks if we have set the 'map/graph/nework/that thing with edges and nodes' yes 
     
     while(True): #this lets you keep interacting untill you are tired of it. 
@@ -48,6 +49,8 @@ def __interactiveTestingEnvironment():
                 game = Game(filename) #try setting up map. will not always happen. I think I have taken care of 
                 #almost all bad inputs. if an input is bad, game wont set. 
                 gameSet = True #the battlefield is set. 
+                print('\nFile successfully loaded\n\n')
+                print(menu)
             except ValueError as err: #catches empty files.
                 print(err)
                 print('enter new file name as this one is empty')
@@ -65,20 +68,31 @@ def __interactiveTestingEnvironment():
                 print('please enter an input file first to use other options')
             elif command == '2':
                 game.nodeOperations() #allows node operations (look, add, delete, update).
+                print(menu)
             elif command == '3':
                 game.edgeOperations() #allows edge operations (look, add, delete, update).
+                print(menu)
             elif command == '4':
                 game.parameterTweaks() #allows updating start, target, Ecodes, Ncodes. 
+                print(menu)
             elif command == '5':
                 game.displayGraph() #displays map in matrix form (also provides option to save).
+                print(menu)
             elif command == '6':
                 game.displayWorld() #allows printings few stats and also has a graphical element.
+                print(menu)
             elif command == '7':
                 game.generateRoutes() #creates all possible routes. 
+                print(menu)
             elif command == '8':
-                game.displayRoutes() #displays possible routes. 
+                try:
+                    game.displayRoutes() #displays possible routes.
+                except:
+                    print('create routes first')
+                print(menu)
             elif command == '9':
                 game.saveNetwork() #saves network using pickle (not gherkin)
+                print(menu)
             else:
                 print('command not identified')
     
@@ -125,7 +139,10 @@ def main():
                 print('you are missing one or more file name')
                 __printUsageInformation()
             else:
-                __simulationMode(sys.argv[2], sys.argv[3])
+                try:
+                    __simulationMode(sys.argv[2], sys.argv[3])
+                except:
+                    print('invalid input')
         else:
             # if the argument is invalid, let the user know. 
             print('This command does not exists')

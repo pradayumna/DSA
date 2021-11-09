@@ -46,23 +46,31 @@ def selectionSort(A):
 def mergeSort(A):
     """ mergeSort - front-end for kick-starting the recursive algorithm
     """
-    leftIdx = 0
+    leftIdx = depth = 0
     rightIdx = len(A) - 1
     if leftIdx < rightIdx:
         midIdx = (leftIdx + rightIdx)//2
-        _mergeSortRecurse(A, leftIdx, midIdx)
-        _mergeSortRecurse(A, midIdx+1, rightIdx)
-        _merge(A, leftIdx, midIdx, rightIdx)
+        _mergeSortRecurse(A, leftIdx, midIdx, depth+1)
+        _mergeSortRecurse(A, midIdx+1, rightIdx, depth+1)
+        _merge(A, leftIdx, midIdx, rightIdx, depth+1)
     return A
 
-def _mergeSortRecurse(A, leftIdx, rightIdx):
+def _mergeSortRecurse(A, leftIdx, rightIdx, depth):
+    #for i in range(depth):
+        #print('\t' + '|', end = '')
+    #print('_mergeSortRecurse( ' + str(A) + ', ' + str(leftIdx) + ', ' + str(rightIdx) + ')')
+    print(depth)
     if leftIdx < rightIdx:
         midIdx = (leftIdx + rightIdx)//2
-        _mergeSortRecurse(A, leftIdx, midIdx)
-        _mergeSortRecurse(A, midIdx+1, rightIdx)
-        _merge(A, leftIdx, midIdx, rightIdx)
+        _mergeSortRecurse(A, leftIdx, midIdx, depth+1)
+        _mergeSortRecurse(A, midIdx+1, rightIdx, depth+1)
+        _merge(A, leftIdx, midIdx, rightIdx, depth+1)
 
-def _merge(A, leftIdx, midIdx, rightIdx):
+def _merge(A, leftIdx, midIdx, rightIdx, depth):
+    print(depth)
+    # for i in range(depth):
+    #     print('\t' + '|', end = '')
+    # print('_merge( ' + str(A) + ', ' + str(leftIdx) + ', ' + str(midIdx) + ', ' + str(rightIdx) + ')')
     tempArr = np.empty(rightIdx - leftIdx + 1)
     ii = leftIdx
     jj = midIdx + 1
@@ -88,20 +96,29 @@ def _merge(A, leftIdx, midIdx, rightIdx):
 def quickSort(A):
     """ quickSort - front-end for kick-starting the recursive algorithm
     """
+    depth = 0
     leftIdx = 0
     rightIdx = len(A) - 1
-    _quickSortRecurse(A, leftIdx, rightIdx)
+    _quickSortRecurse(A, leftIdx, rightIdx, depth)
     return A
 
-def _quickSortRecurse(A, leftIdx, rightIdx):
+def _quickSortRecurse(A, leftIdx, rightIdx, depth):
+    # for i in range(depth):
+    #     print('\t' + '|', end = '')
+    # print('qsort_rec( ' + str(A) + ', ' + str(leftIdx) + ', ' + str(rightIdx) + ')')
+    print(depth)
     if rightIdx > leftIdx:
-        pivotIdx = (leftIdx + rightIdx)//2
-        newPivotIdx = _doPartistioning(A, leftIdx, rightIdx, pivotIdx)
+        pivotIdx = leftIdx
+        newPivotIdx = _doPartistioning(A, leftIdx, rightIdx, pivotIdx, depth+1)
         
-        _quickSortRecurse(A, leftIdx, newPivotIdx-1)
-        _quickSortRecurse(A, newPivotIdx+1, rightIdx)
+        _quickSortRecurse(A, leftIdx, newPivotIdx-1, depth+1)
+        _quickSortRecurse(A, newPivotIdx+1, rightIdx, depth+1)
 
-def _doPartistioning(A, leftIdx, rightIdx, pivotIdx):
+def _doPartistioning(A, leftIdx, rightIdx, pivotIdx, depth):
+    # for i in range(depth):
+    #     print('\t' + '|', end = '')
+    # print('dopart( ' + str(A) + ', ' + str(leftIdx) + ', ' + str(rightIdx) + ', ' + str(pivotIdx) + ')')
+    print(depth)
     pivotVal = A[pivotIdx]
     A[pivotIdx] = A[rightIdx]
     A[rightIdx] = pivotVal
@@ -156,3 +173,5 @@ def _quickSortRandomRecurse(A, leftIdx, rightIdx):
         _quickSortRecurse(A, leftIdx, newPivotIdx-1)
         _quickSortRecurse(A, newPivotIdx+1, rightIdx)
     
+A = [i for i in range(1, 101)]
+quickSort(A)

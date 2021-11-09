@@ -72,6 +72,11 @@ class DSAHeap():
             if len(args) > 1:
                 self.__heapArray[index].setValue(args[1])
             self.__trickleUp(index)
+            for i in self.__heapArray:
+                print(i.getPriority(), end = ' ')
+            print()
+            print()
+            print()
             
     def remove(self):
         if self.__count == 0:
@@ -132,3 +137,6 @@ class DSAHeapIO():
             file.write(str(data.getHeapArray()[i].getPriority()) + ',' + str(data.getHeapArray()[i].getValue()) + '\n')
 
 
+A = DSAHeap(15)
+for i in [50, 30, 100, 40, 60, 50, 80, 70, 60, 90]:
+    A.add(i)

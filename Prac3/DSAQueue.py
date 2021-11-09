@@ -11,7 +11,7 @@ import numpy as np
 
 class queue():
     
-    capacity = 10
+    capacity = 20
     
     def __init__(self):
         self.queueArray = np.empty(self.capacity, dtype = object)
@@ -19,6 +19,13 @@ class queue():
         
     def getCount(self):
         return self.count
+    
+    def __str__(self):
+        a = ''
+        # for i in self.queueArray:
+        #     if i is not None:
+        #         a = a + ' ' + str(i)
+        return a
 
 class sequenceQueue(queue):
     

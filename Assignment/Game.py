@@ -11,12 +11,16 @@ This file contains code for Game classs
 from linkedKList import DSALinkedList 
 from DSAHash import DSAHash #Hash is needed for maintaining NCodes and ECodes.
 from DSAGraphWithEdge import DSAGraph #DSAGraphWithEdge lets maintaining weighted graphs. 
-import networkx as nx #This one is used for visualisation part. Its an add on feature. 
-import matplotlib.pyplot as plt #This is also needed for visualisation part
-import random #this one is also needed for visualisation part
-from matplotlib.lines import Line2D #this one is also needed for visualisation part
 import pickle #this is used to save the network. 
 from DSAHeap import DSAHeap
+try:
+    import networkx as nx #This one is used for visualisation part. Its an add on feature. 
+    import matplotlib.pyplot as plt #This is also needed for visualisation part
+    import random #this one is also needed for visualisation part
+    from matplotlib.lines import Line2D #this one is also needed for visualisation part
+    visualise = True
+except:
+    visualise = False
 
 class Game():
     
@@ -30,7 +34,8 @@ class Game():
         self.__NCode = DSAHash(10) #The hash is self-resizing. so do not worry about it having just a size of 10
         self.__ECode = DSAHash(10)
         self.__graph = self.__makeGraph() #this function creates the graph. 
-        self.__pathHeap = None        
+        self.__pathHeap = None 
+        
     def __makeGraph(self):
         '''
         this function creates graph. 
@@ -40,7 +45,9 @@ class Game():
         @raises KeyError -> when the file do not have start and/or target
         '''
         Start = False #keeps track whether start has been found
-        Target = False #yup, you got that right. 
+        Target = False #yup, you got that right.
+        if self.__fileName.split('.')[1] != 'txt':
+            raise FileNotFoundError('file not is correct format')
         file = open(self.__fileName, 'r') #oopen the file
         data = file.readlines() #read lines (I am allowed this one, right?)
         if len(data) == 0: #checks if the file is empty
@@ -750,7 +757,7 @@ class Game():
                 file.write(i.getKey() + ' ' + str(i.getValue()) + '\n')
             file.write('\n' + '-'*20 + '\n')
                     
-        if command == '3': #user wants to visualise
+        if command == '3' and visualise == True: #user wants to visualise
             self.__visualise()
     
 

@@ -1,0 +1,40 @@
+Selection Sort
+     Theoretical Performance
+     - Best Case: O(n^2)
+     - Worst Case: O(n^2)
+     - Average Case: O(n^2)
+	All these performances are independent of the distribution of data
+     Data Size  | Average Case
+     1000       | 0.74988
+     10000      | 61.8693
+     100000     | The code ran too long for an hour and still did not give an out. Based on theory, the time should be around 6100 seconds = 2 hrs
+Discussion : The selection sort algorithm is independent of distribution of data. It does n^2 comparison in every case. This is evident by the performance data here. When we increase the number of input data by a factor of 10, the time taken by code to run increases by a factor of 10. Selection sort selects the looks for the smallest element in an array and swaps it with the next un-sorted array from the left side. Therefore in every run, it makes comparisons in order of n. the algorithm does n such runs. It is not impacted by the pre ordering of data. 
+
+
+
+Quick Sort
+     Theoretical Performance
+     - Best Case: O(nlog(n))
+     - Worst Case: O(nlog(n))
+     - Average Case: O(nlog(n))
+	All these performances are independent of the distribution of data and the time complexity is closer to the median case of quick sort. 
+     Data Size  | Average Case
+     1000       | 0.1454
+     10000      | 1.353
+     100000     | 13.599
+Discussion : Quick sort is a sorting algorithm that sorts data in (Nlog(n)) time complexity. This version of quick sort uses three elements from the array to choose a pivot. It helps in making the algorithm faster as three elements are more representative of data that a single element. In case of single elements, we can get time complexity of order of n^2 when the array is already sorted. But in this case, we get a more representative pivot that has chances of dividing the array evenly. It is evident from time complexity analysis that on increasing the dataset by a factor on n, we are only increasing time complexity by a factor close to nlogn 
+
+
+Built-in Sort 
+ Theoretical Performance
+     - Best Case: O(n) -> when array elements are in jumbled order (source - javapoint.com). 
+     - Worst Case: O(nlog(n))
+     - Average Case: O(nlog(n))
+	All these performances are independent of the distribution of data
+     Data Size  | Average Case
+     1000       | 0.1396
+     10000      | 1.24275
+     100000     | 12.349
+
+The inbuilt sort in python uses timsort. it is a combination of merge sort and insertion sort. The timsort's average case is nlogn. It can be seen from the data above that it follows that pattern only. It seems a bit faster than the quicksort algorithm that we tested. It is because of few steps that it saves by manipulating the existing order of the data
+

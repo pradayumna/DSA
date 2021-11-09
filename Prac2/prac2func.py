@@ -34,7 +34,7 @@ def _gcd(a, b):
     if b%a == 0:
         ans = a
     else:
-        ans = _gcd(b%a, b)
+        ans = _gcd(b%a, a)
     return ans
 
 def int2chr(n):
